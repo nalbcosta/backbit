@@ -17,7 +17,7 @@ export function Header() {
           <a className="hover:text-(--ink)" href="#como-funciona">
             Como funciona
           </a>
-          <a className="hover:text-(--ink)" href="#descobrir">
+          <a className="hover:text-(--ink)" href="/discover">
             Descobrir
           </a>
         </nav>

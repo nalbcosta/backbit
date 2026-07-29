@@ -16,7 +16,7 @@ export function Footer() {
           </div>
           <nav aria-label="Links do rodapé" className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-(--ink-muted)">
             <a className="hover:text-(--ink)" href="#como-funciona">Como funciona</a>
-            <a className="hover:text-(--ink)" href="#descobrir">Descobrir</a>
+            <a className="hover:text-(--ink)" href="/discover">Descobrir</a>
             <a className="hover:text-(--ink)" href="/login">Entrar</a>
           </nav>
         </div>

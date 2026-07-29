@@ -146,6 +146,13 @@ button{
 .art-muted {
   color: var(--on-art-muted);
 }
+.discover-cover {
+  background: linear-gradient(145deg, #44312d, #171513 82%);
+}
+.discover-cover-ember { background: linear-gradient(145deg, #9b4b34, #342824 82%); }
+.discover-cover-forest { background: linear-gradient(145deg, #3e635a, #1e2926 82%); }
+.discover-cover-night { background: linear-gradient(145deg, #394a70, #1c202e 82%); }
+.discover-cover-gold { background: linear-gradient(145deg, #9a7040, #3d3023 82%); }
 
 @media (min-width: 768px) {
   .section {

@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Container } from "@/components/ui/container";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { Button } from "@/components/ui/button";
 const picks = [
   {
     title: "Para terminar em um fim de semana",
@@ -44,6 +45,7 @@ export function DiscoveryPreview() {
             ))}
           </div>
         </div>
+        <Button href="/discover" variant="secondary" className="mt-9 border-(--line) text-(--ink) hover:bg-(--surface) hover:text-(--ink)">Explorar descobertas</Button>
       </Container>
     </section>
   );

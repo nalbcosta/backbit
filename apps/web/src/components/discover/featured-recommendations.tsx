@@ -1,0 +1,4 @@
+import type { DiscoverGame } from "@/lib/discover/types";
+import { DiscoverGameCard } from "@/components/discover/game-card";
+type FeaturedRecommendationsProps = { games: readonly DiscoverGame[]; onPreview: (game: DiscoverGame) => void };
+export function FeaturedRecommendations({ games, onPreview }: FeaturedRecommendationsProps) { return <section aria-labelledby="featured-title"><div className="grid gap-5 sm:grid-cols-[.7fr_1fr] sm:items-end"><div><p className="eyebrow">Comece por aqui</p><h1 id="featured-title" className="display mt-4 max-w-xl text-5xl leading-[.9] sm:text-6xl">Descubra algo que cabe no agora.</h1></div><p className="max-w-lg text-sm leading-6 text-(--ink-muted) sm:mb-1">Jogos escolhidos por duração, clima e pela vontade de abrir algo novo — sem uma prateleira infinita no caminho.</p></div><div className="mt-9 grid gap-4 md:grid-cols-2">{games.map((game) => <DiscoverGameCard key={game.id} game={game} onPreview={onPreview} />)}</div></section>; }
