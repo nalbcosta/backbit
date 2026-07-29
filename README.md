@@ -6,7 +6,7 @@
 
 Backbit is a mobile-first app for people who keep adding games to their backlog and never know what to play next.
 
-It helps you track what you want to play, what you are playing now, and what you already finished — with a board that feels practical, fast, and built for real use instead of just collecting entries.
+It helps you track what you want to play, what you are playing now, and what you already finished, with a board that feels practical, fast, and built for real use instead of just collecting entries.
 
 ## What it is
 
@@ -39,8 +39,8 @@ Backbit is being built around three ideas:
 ## Stack
 
 - Next.js + TypeScript for the web app.
-- NestJS + TypeScript for the backend.[1]
-- MongoDB for the product layer and user data.[1]
+- NestJS + TypeScript for the backend.
+- MongoDB for the product layer and user data.
 - RAWG for external game metadata, accessed through the backend only.
 
 RAWG requires an API key for requests, so the key should stay on the server side instead of being exposed in the client. Their API usage also requires attribution in the applicable plan, which should be respected anywhere game data and media are surfaced in the product.
