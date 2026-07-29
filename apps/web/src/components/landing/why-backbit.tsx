@@ -10,7 +10,7 @@ export function WhyBackbit() {
     <section className="section">
       <Container className="grid gap-10 lg:grid-cols-2">
         <SectionHeading
-          eyebrow="Por que Backbit"
+          eyebrow="Por que Backbit?"
           title="Para quem leva seus jogos a sério — sem tornar isso um trabalho."
         />
         <ul className="divide-y divide-(--line) border-y border-(--line)">
