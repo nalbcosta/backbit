@@ -23,8 +23,8 @@ export function Header() {
         </nav>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button href="#waitlist" className="min-h-10 px-4 text-xs">
-            Entrar na lista
+          <Button href="/login" className="min-h-10 px-4 text-xs">
+            Entrar
           </Button>
         </div>
       </Container>

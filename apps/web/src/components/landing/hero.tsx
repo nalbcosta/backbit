@@ -24,7 +24,7 @@ export function Hero() {
             que cada jogo deixou em você.
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <Button href="#waitlist">Entrar na lista de espera</Button>
+            <Button href="/login">Acessar o Backbit</Button>
             <Button href="#como-funciona" variant="secondary">
               Ver por dentro
             </Button>
