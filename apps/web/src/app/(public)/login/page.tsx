@@ -9,13 +9,13 @@ export default function LoginPage() {
       <section className="flex min-h-dvh items-center px-5 py-10 sm:px-8 lg:min-h-0 lg:overflow-y-auto lg:px-16">
         <div className="mx-auto w-full max-w-sm">
           <a href="/" className="text-sm font-bold tracking-[-.04em]">{APP_NAME}</a>
-          <div className="mt-14">
+          <div className="mt-10 sm:mt-12 xl:mt-14">
             <p className="eyebrow">Acessar sua conta</p>
-            <h2 className="display mt-4 text-4xl leading-[.95] sm:text-5xl">Seu próximo jogo está aqui.</h2>
-            <p className="mt-5 text-sm leading-6 text-(--ink-muted)">Entre para retomar seu ritmo, sem perder o fio do que está jogando.</p>
+            <h2 className="display mt-4 text-4xl leading-[.95] lg:text-[2.5rem] xl:text-5xl">Seu próximo jogo está aqui.</h2>
+            <p className="mt-4 text-sm leading-6 text-(--ink-muted)">Entre para retomar seu ritmo, sem perder o fio do que está jogando.</p>
           </div>
-          <div className="mt-9"><LoginForm /></div>
-          <p className="mt-10 text-xs leading-5 text-(--ink-muted)">Backbit é um lugar pessoal para organizar jogos, sessões e memórias de jogo.</p>
+          <div className="mt-8"><LoginForm /></div>
+          <p className="mt-8 text-xs leading-5 text-(--ink-muted)">Backbit é um lugar pessoal para organizar jogos, sessões e memórias de jogo.</p>
         </div>
       </section>
     </main>

@@ -21,6 +21,8 @@
   --on-art: #fffaf2;
   --on-art-muted: #fffaf2bf;
   --line-art: #fffaf24d;
+  --scrollbar-thumb: #aaa196;
+  --scrollbar-thumb-hover: #813f2b;
   --display: var(--font-playfair), Georgia, serif;
   --ui: var(--font-geist-sans), Arial, sans-serif;
 }
@@ -46,6 +48,39 @@ html[data-theme="dark"] {
   --on-art: #fff8f0;
   --on-art-muted: #fff8f0bf;
   --line-art: #fff8f04d;
+  --scrollbar-thumb: #5b5249;
+  --scrollbar-thumb-hover: #b9684c;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+*::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: var(--scrollbar-thumb);
+  background-clip: padding-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+  background-clip: padding-box;
 }
 
 * {
