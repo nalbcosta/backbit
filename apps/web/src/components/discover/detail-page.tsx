@@ -20,13 +20,13 @@ import type {
   DiscoverReview,
 } from "@/lib/discover/types";
 
-function BackToDiscover() {
+function BackToDiscover({ href = "/discover", label = "Voltar para descobrir" }: { href?: string; label?: string }) {
   return (
     <Link
-      href="/discover"
+      href={href}
       className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-(--ink-muted) transition-colors hover:text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
     >
-      <ArrowLeft aria-hidden="true" size={17} /> Voltar para descobrir
+      <ArrowLeft aria-hidden="true" size={17} /> {label}
     </Link>
   );
 }
@@ -41,11 +41,11 @@ function DetailLayout({ children }: { children: ReactNode }) {
   );
 }
 
-export function GameDetailPage({ game }: { game: DiscoverGame }) {
+export function GameDetailPage({ game, backHref = "/discover" }: { game: DiscoverGame; backHref?: string }) {
   return (
     <DetailLayout>
       <Container className="py-8 sm:py-12 lg:py-16">
-        <BackToDiscover />
+        <BackToDiscover href={backHref} label={backHref === "/discover/games" ? "Voltar para catálogo" : undefined} />
         <section className="mt-8 grid gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
           <div
             className={`order-2 discover-cover discover-cover-${game.coverTone} relative min-h-64 overflow-hidden rounded-3xl p-5 text-white sm:min-h-136 lg:order-1`}

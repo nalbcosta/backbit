@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import type { DiscoverGame } from "@/lib/discover/types";
@@ -35,23 +36,27 @@ export function GameGrid({ games, onPreview }: GameGridProps) {
           </h2>
         </div>
         <div className="flex flex-wrap items-center gap-3 sm:justify-end">
-          <p className="text-sm text-(--ink-muted)">{games.length} encontrados</p>
-          <button
-            type="button"
-            disabled
-            title="O catálogo completo estará disponível em breve"
-            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-(--line) px-4 text-xs font-semibold text-(--ink-muted) opacity-75"
+          <p className="text-sm text-(--ink-muted)">
+            {games.length} encontrados
+          </p>
+          <Link
+            href="/discover/games"
+            className="inline-flex min-h-10 items-center gap-2 rounded-full border border-(--line) px-4 text-xs font-semibold text-(--ink-muted) transition-colors hover:border-(--ink-muted) hover:text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
           >
-            Catálogo completo · em breve
+            Catálogo completo
             <ArrowUpRight aria-hidden="true" size={14} />
-          </button>
+          </Link>
         </div>
       </div>
       {games.length ? (
         <>
           <div className="mt-7 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {visibleGames.map((game) => (
-              <DiscoverGameCard key={game.id} game={game} onPreview={onPreview} />
+              <DiscoverGameCard
+                key={game.id}
+                game={game}
+                onPreview={onPreview}
+              />
             ))}
           </div>
           {pageCount > 1 && (

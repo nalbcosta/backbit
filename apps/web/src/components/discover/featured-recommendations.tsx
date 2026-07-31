@@ -1,6 +1,7 @@
 "use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import type { DiscoverGame } from "@/lib/discover/types";
@@ -68,11 +69,18 @@ export function FeaturedRecommendations({
           Jogos escolhidos por duração, clima e pela vontade de abrir algo novo
           — sem uma prateleira infinita no caminho.
         </p>
+        <Link
+          href="/discover/games"
+          className="text-sm font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)"
+        >
+          Explorar todos os jogos
+        </Link>
       </div>
 
       <div className="mt-8 flex items-center justify-between gap-4 sm:mt-9 md:hidden">
         <p className="text-xs font-semibold uppercase tracking-[.12em] text-(--ink-muted)">
-          {String(activeIndex + 1).padStart(2, "0")} / {String(games.length).padStart(2, "0")}
+          {String(activeIndex + 1).padStart(2, "0")} /{" "}
+          {String(games.length).padStart(2, "0")}
         </p>
         {games.length > 1 && (
           <div className="flex gap-2">
@@ -119,7 +127,10 @@ export function FeaturedRecommendations({
       </div>
 
       {games.length > 1 && (
-        <div className="mt-3 flex justify-center gap-2 md:hidden" aria-label="Posição no carrossel">
+        <div
+          className="mt-3 flex justify-center gap-2 md:hidden"
+          aria-label="Posição no carrossel"
+        >
           {games.map((game, index) => (
             <button
               key={game.id}
