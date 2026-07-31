@@ -9,6 +9,7 @@ export function Footer() {
         { href: "#como-funciona", label: "Como funciona" },
         { href: "/discover", label: "Descobrir" },
         { href: "/login", label: "Entrar" },
+        { href: "/privacidade", label: "Privacidade" },
       ]}
     />
   );
