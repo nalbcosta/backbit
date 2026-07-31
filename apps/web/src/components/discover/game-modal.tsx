@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { Dialog } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import type { DiscoverGame } from "@/lib/discover/types";
@@ -37,12 +38,12 @@ export function GameModal({ game, onClose }: GameModalProps) {
               </dd>
             </div>
           </dl>
-          <a
+          <Link
             href={`/discover/games/${game.slug}`}
             className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold underline underline-offset-4 hover:text-(--accent)"
           >
             Ver página do jogo <ArrowUpRight aria-hidden="true" size={16} />
-          </a>
+          </Link>
         </div>
       )}
     </Dialog>

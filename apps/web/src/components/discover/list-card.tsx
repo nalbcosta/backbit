@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import type { DiscoverCollection } from "@/lib/discover/types";
 type ListCardProps = { collection: DiscoverCollection };
@@ -16,12 +17,12 @@ export function ListCard({ collection }: ListCardProps) {
           {collection.description}
         </p>
       </div>
-      <a
+      <Link
         href={`/discover/lists/${collection.slug}`}
         className="mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold hover:text-(--accent)"
       >
         Abrir lista <ArrowUpRight aria-hidden="true" size={16} />
-      </a>
+      </Link>
     </Card>
   );
 }

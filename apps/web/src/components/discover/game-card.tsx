@@ -1,4 +1,5 @@
 import { ArrowUpRight, Eye } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { DiscoverGame } from "@/lib/discover/types";
@@ -37,13 +38,13 @@ export function DiscoverGameCard({ game, onPreview }: GameCardProps) {
           >
             <Eye aria-hidden="true" size={16} /> Prévia
           </button>
-          <a
+          <Link
             href={`/discover/games/${game.slug}`}
             aria-label={`Abrir ${game.title}`}
             className="inline-flex size-10 items-center justify-center rounded-full border border-(--line) transition-colors hover:bg-(--action-bg) hover:text-(--action-fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
           >
             <ArrowUpRight aria-hidden="true" size={17} />
-          </a>
+          </Link>
         </div>
       </div>
     </Card>

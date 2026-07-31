@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -37,19 +38,19 @@ export function SiteHeader({
   return (
     <header className={`border-b border-(--line) ${className}`}>
       <Container className={`flex items-center justify-between gap-3 ${containerClassName}`}>
-        <a href={logoHref} className="text-sm font-bold tracking-[-.04em]">
+        <Link href={logoHref} className="text-sm font-bold tracking-[-.04em]">
           {APP_NAME}
-        </a>
+        </Link>
         <nav aria-label={navigationLabel} className={navigationClassName}>
           {links.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               aria-current={link.current ? "page" : undefined}
               className={link.current ? "font-semibold text-(--ink)" : "hover:text-(--ink)"}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="flex items-center gap-2">

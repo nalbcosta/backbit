@@ -1,4 +1,5 @@
 import { Quote } from "lucide-react";
+import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import type { DiscoverGame, DiscoverReview } from "@/lib/discover/types";
 type ReviewCardProps = { review: DiscoverReview; game: DiscoverGame };
@@ -16,12 +17,12 @@ export function ReviewCard({ review, game }: ReviewCardProps) {
             {game.title} · {review.publishedAt}
           </p>
         </div>
-        <a
+        <Link
           href={`/discover/reviews/${review.slug}`}
           className="text-sm font-semibold underline underline-offset-4 hover:text-(--accent)"
         >
           Ler
-        </a>
+        </Link>
       </div>
     </Card>
   );

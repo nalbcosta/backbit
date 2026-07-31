@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowUp } from "lucide-react";
 
 import { Container } from "@/components/ui/container";
@@ -24,9 +25,9 @@ export function SiteFooter({
       <Container>
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <a href={logoHref} className="text-sm font-semibold tracking-[-.02em] text-(--ink)">
+            <Link href={logoHref} className="text-sm font-semibold tracking-[-.02em] text-(--ink)">
               {APP_NAME}
-            </a>
+            </Link>
             <p className="mt-2 max-w-xs text-xs leading-5 text-(--ink-muted)">
               {APP_TAGLINE}
             </p>
@@ -36,22 +37,22 @@ export function SiteFooter({
             className="flex flex-wrap gap-x-5 gap-y-2 text-xs text-(--ink-muted)"
           >
             {links.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
                 aria-current={link.current ? "page" : undefined}
                 className="hover:text-(--ink)"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>
         <div className="mt-8 flex items-center justify-between border-t border-(--line) pt-4 text-xs text-(--ink-muted)">
           <span>© {new Date().getFullYear()} {APP_NAME}</span>
-          <a href={backToTopHref} className="inline-flex items-center gap-1 hover:text-(--ink)">
+          <Link href={backToTopHref} className="inline-flex items-center gap-1 hover:text-(--ink)">
             {backToTopLabel} <ArrowUp aria-hidden="true" size={13} />
-          </a>
+          </Link>
         </div>
       </Container>
     </footer>

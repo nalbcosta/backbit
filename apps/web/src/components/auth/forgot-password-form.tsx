@@ -1,6 +1,7 @@
 "use client";
 
 import { MailCheck } from "lucide-react";
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -29,9 +30,9 @@ export function ForgotPasswordForm() {
           <p className="mt-4 text-sm leading-6 text-(--ink-muted)">
             Enviaremos o link de redefinição para {email}. Se ele não aparecer em alguns minutos, vale olhar o spam.
           </p>
-          <a href="/login" className="mt-7 inline-flex text-sm font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
+          <Link href="/login" className="mt-7 inline-flex text-sm font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
             Voltar para entrar
-          </a>
+          </Link>
         </Card>
       </div>
     );
@@ -55,9 +56,9 @@ export function ForgotPasswordForm() {
       </Button>
       <p className="text-center text-sm leading-6 text-(--ink-muted)">
         Lembrou sua senha?{" "}
-        <a href="/login" className="font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
+        <Link href="/login" className="font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
           Voltar para entrar
-        </a>
+        </Link>
       </p>
     </form>
   );

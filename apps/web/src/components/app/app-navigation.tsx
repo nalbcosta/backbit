@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Compass, House, LayoutGrid, UserRound, type LucideIcon } from "lucide-react";
 
 type NavigationItem = {
@@ -21,10 +22,10 @@ export function AppNavigation() {
         {navigationItems.map(({ label, icon: Icon, href, active }) => (
           <li key={label}>
             {active && href ? (
-              <a href={href} aria-current="page" className="flex min-h-16 flex-col items-center justify-center gap-1 text-xs font-semibold text-(--ink)">
+              <Link href={href} aria-current="page" className="flex min-h-16 flex-col items-center justify-center gap-1 text-xs font-semibold text-(--ink)">
                 <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
                 {label}
-              </a>
+              </Link>
             ) : (
               <span aria-disabled="true" className="flex min-h-16 flex-col items-center justify-center gap-1 text-xs text-(--ink-muted)">
                 <Icon aria-hidden="true" size={18} strokeWidth={1.6} />

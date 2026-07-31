@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type {
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
@@ -32,7 +33,7 @@ function getButtonClassName({
 }
 
 function ButtonLink({ children, className, variant, fullWidth, ...props }: ButtonLinkProps) {
-  return <a className={getButtonClassName({ className, variant, fullWidth })} {...props}>{children}</a>;
+  return <Link className={getButtonClassName({ className, variant, fullWidth })} {...props}>{children}</Link>;
 }
 
 function ButtonElement({ children, className, variant, fullWidth, type = "button", ...props }: ButtonElementProps) {

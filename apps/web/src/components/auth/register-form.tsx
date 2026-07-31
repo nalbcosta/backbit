@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 
 import { PasswordVisibilityToggle } from "@/components/auth/password-visibility-toggle";
@@ -91,9 +92,9 @@ export function RegisterForm() {
       </Button>
       <p className="text-center text-sm leading-6 text-(--ink-muted)">
         Já tem conta?{" "}
-        <a href="/login" className="font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
+        <Link href="/login" className="font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
           Entrar
-        </a>
+        </Link>
       </p>
     </form>
   );

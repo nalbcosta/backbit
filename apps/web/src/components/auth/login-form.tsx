@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 
 import { PasswordVisibilityToggle } from "@/components/auth/password-visibility-toggle";
@@ -38,17 +39,17 @@ export function LoginForm() {
           }
         />
         <p className="mt-2 text-right text-xs text-(--ink-muted)">
-          <a href="/forgot-password" className="underline underline-offset-4 hover:text-(--ink)">
+          <Link href="/forgot-password" className="underline underline-offset-4 hover:text-(--ink)">
             Esqueceu a senha?
-          </a>
+          </Link>
         </p>
       </div>
       <Button type="submit" fullWidth>Entrar no Backbit</Button>
       <p className="text-center text-sm leading-6 text-(--ink-muted)">
         Ainda não tem conta?{" "}
-        <a href="/register" className="font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
+        <Link href="/register" className="font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)">
           Criar conta
-        </a>
+        </Link>
       </p>
     </form>
   );
