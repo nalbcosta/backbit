@@ -18,7 +18,7 @@ const picks = [
 ];
 export function DiscoveryPreview() {
   return (
-    <section id="descobrir" className="theme-inverse section">
+    <section id="descobrir" className="landing-section theme-inverse section">
       <Container>
         <div className="grid gap-12 lg:grid-cols-2 lg:items-end">
           <SectionHeading

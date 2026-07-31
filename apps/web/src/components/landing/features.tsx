@@ -25,7 +25,7 @@ const features = [
 ];
 export function Features() {
   return (
-    <section className="section">
+    <section className="landing-section section">
       <Container>
         <SectionHeading
           eyebrow="Feito para voltar"

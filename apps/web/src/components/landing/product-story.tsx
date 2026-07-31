@@ -6,7 +6,7 @@ export function ProductStory() {
   return (
     <section
       id="como-funciona"
-      className="section border-y border-(--line) bg-(--surface-muted)"
+      className="landing-section section border-y border-(--line) bg-(--surface-muted)"
     >
       <Container className="grid gap-10 lg:grid-cols-2 lg:gap-24">
         <SectionHeading

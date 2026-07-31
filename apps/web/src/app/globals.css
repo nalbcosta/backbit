@@ -95,6 +95,62 @@ body {
   color: var(--ink);
   font-family: var(--ui);
 }
+.landing-shell {
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+.landing-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--canvas);
+}
+.landing-section {
+  min-height: 100svh;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  display: flex;
+  align-items: center;
+}
+.landing-page > .landing-section:first-child {
+  min-height: calc(100svh - 4.5rem);
+}
+.hero-contours {
+  color: var(--ink-muted);
+  opacity: 0.24;
+  overflow: hidden;
+}
+.hero-contour-line {
+  stroke: currentColor;
+  stroke-width: 1;
+}
+.hero-contours-motion {
+  animation: hero-contours-drift 18s cubic-bezier(.45, 0, .55, 1) infinite alternate;
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
+}
+@keyframes hero-contours-drift {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-18px, 12px) scale(1.025);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-contours-motion {
+    animation: none;
+  }
+}
+@media (max-width: 767px) {
+  .hero-contours {
+    opacity: 0.17;
+  }
+}
 a { text-decoration: none; }
 button,
 input {

@@ -5,7 +5,7 @@ import { APP_NAME } from "@/config/app";
 
 export function Header() {
   return (
-    <header className="border-b border-(--line)">
+    <header className="landing-header border-b border-(--line)">
       <Container className="flex min-h-18 items-center justify-between gap-3">
         <a href="#inicio" className="text-sm font-bold tracking-[-.04em]">
           {APP_NAME}

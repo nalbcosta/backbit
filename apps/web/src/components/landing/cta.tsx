@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/container";
 import { APP_NAME } from "@/config/app";
 export function Cta() {
   return (
-    <section className="section border-t border-(--line)">
+    <section className="landing-section section border-t border-(--line)">
       <Container>
         <div className="art px-6 py-14 sm:px-12 sm:py-20">
           <p className="eyebrow">Seu espaço de jogo</p>
