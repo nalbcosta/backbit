@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import type { DiscoverCollection } from "@/lib/discover/types";
@@ -23,23 +24,27 @@ export function CollectionsSection({ collections }: CollectionsSectionProps) {
   }, [collections]);
 
   return (
-    <section className="discover-section border-t border-(--line) pt-14" aria-labelledby="collections-title">
+    <section
+      className="discover-section border-t border-(--line) pt-14"
+      aria-labelledby="collections-title"
+    >
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between sm:gap-6">
         <div>
           <p className="eyebrow">Listas com ponto de vista</p>
-          <h2 id="collections-title" className="display mt-3 max-w-2xl text-4xl leading-[.95] sm:text-5xl">
+          <h2
+            id="collections-title"
+            className="display mt-3 max-w-2xl text-4xl leading-[.95] sm:text-5xl"
+          >
             Escolhas que já vêm com contexto.
           </h2>
         </div>
-        <button
-          type="button"
-          disabled
-          title="A área completa de collections estará disponível em breve"
+        <Link
+          href="/discover/lists"
           className="inline-flex min-h-10 self-start items-center gap-2 rounded-full border border-(--line) px-4 text-xs font-semibold text-(--ink-muted) opacity-75 sm:self-end"
         >
-          Ver todas · em breve
+          Ver todas
           <ArrowUpRight aria-hidden="true" size={14} />
-        </button>
+        </Link>
       </div>
 
       {collections.length ? (

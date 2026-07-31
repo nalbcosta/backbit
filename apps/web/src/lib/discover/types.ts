@@ -22,6 +22,17 @@ export type DiscoverCollection = {
   description: string;
   gameIds: readonly string[];
   mood: string;
+  subtitle?: string;
+  tags?: readonly string[];
+  platforms?: readonly string[];
+  curator?: string;
+  curatorType?: "Editorial" | "Comunidade" | "Crítica";
+  popularity?: number;
+  rating?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  featured?: boolean;
+  coverTone?: DiscoverGame["coverTone"];
 };
 
 export type DiscoverReview = {
@@ -40,5 +51,10 @@ export type DiscoverContentItem =
   | { kind: "collection"; item: DiscoverCollection }
   | { kind: "review"; item: DiscoverReview };
 
-export type DiscoverFilter = "Tudo" | "Curto" | "Narrativo" | "Exploração" | "Cooperativo";
+export type DiscoverFilter =
+  | "Tudo"
+  | "Curto"
+  | "Narrativo"
+  | "Exploração"
+  | "Cooperativo";
 export type DiscoverSort = "relevancia" | "nota" | "recente";
