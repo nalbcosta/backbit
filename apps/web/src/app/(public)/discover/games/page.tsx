@@ -1,5 +1,10 @@
 import { GamesDiscoverShell } from "@/components/discover/games-discover-shell";
+import { Suspense } from "react";
 
 export default function GamesDiscoverPage() {
-  return <GamesDiscoverShell />;
+  return (
+    <Suspense>
+      <GamesDiscoverShell />
+    </Suspense>
+  );
 }

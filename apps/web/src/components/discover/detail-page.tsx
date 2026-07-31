@@ -20,7 +20,13 @@ import type {
   DiscoverReview,
 } from "@/lib/discover/types";
 
-function BackToDiscover({ href = "/discover", label = "Voltar para descobrir" }: { href?: string; label?: string }) {
+function BackToDiscover({
+  href = "/discover",
+  label = "Voltar para descobrir",
+}: {
+  href?: string;
+  label?: string;
+}) {
   return (
     <Link
       href={href}
@@ -41,17 +47,30 @@ function DetailLayout({ children }: { children: ReactNode }) {
   );
 }
 
-export function GameDetailPage({ game, backHref = "/discover" }: { game: DiscoverGame; backHref?: string }) {
+export function GameDetailPage({
+  game,
+  backHref = "/discover",
+}: {
+  game: DiscoverGame;
+  backHref?: string;
+}) {
   return (
     <DetailLayout>
       <Container className="py-8 sm:py-12 lg:py-16">
-        <BackToDiscover href={backHref} label={backHref === "/discover/games" ? "Voltar para catálogo" : undefined} />
+        <BackToDiscover
+          href={backHref}
+          label={
+            backHref === "/discover/games" ? "Voltar para catálogo" : undefined
+          }
+        />
         <section className="mt-8 grid gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
           <div
             className={`order-2 discover-cover discover-cover-${game.coverTone} relative min-h-64 overflow-hidden rounded-3xl p-5 text-white sm:min-h-136 lg:order-1`}
           >
             <div className="relative z-10 flex items-start justify-between gap-4">
-              <Badge variant="inverse">{game.score.toFixed(1)} no Backbit</Badge>
+              <Badge variant="inverse">
+                {game.score.toFixed(1)} no Backbit
+              </Badge>
               <span className="text-xs font-semibold uppercase tracking-[.12em] text-white/75">
                 {game.duration}
               </span>
@@ -142,14 +161,21 @@ export function GameDetailPage({ game, backHref = "/discover" }: { game: Discove
 export function CollectionDetailPage({
   collection,
   games,
+  backHref = "/discover",
 }: {
   collection: DiscoverCollection;
   games: readonly DiscoverGame[];
+  backHref?: string;
 }) {
   return (
     <DetailLayout>
       <Container className="py-8 sm:py-12 lg:py-16">
-        <BackToDiscover />
+        <BackToDiscover
+          href={backHref}
+          label={
+            backHref === "/discover/lists" ? "Voltar para listas" : undefined
+          }
+        />
         <section className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end lg:gap-16">
           <div>
             <p className="eyebrow">{collection.mood}</p>
@@ -238,14 +264,30 @@ export function ReviewDetailPage({
             </h1>
             <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm">
               <p className="font-semibold">Por {review.author}</p>
-              <span className="h-1 w-1 rounded-full bg-(--line)" aria-hidden="true" />
-              <div className="flex items-center gap-2 text-(--accent)" aria-label={`Nota ${review.rating} de 5`}>
+              <span
+                className="h-1 w-1 rounded-full bg-(--line)"
+                aria-hidden="true"
+              />
+              <div
+                className="flex items-center gap-2 text-(--accent)"
+                aria-label={`Nota ${review.rating} de 5`}
+              >
                 <span className="flex gap-0.5" aria-hidden="true">
                   {Array.from({ length: 5 }, (_, index) => (
-                    <Star key={index} size={14} fill={index < Math.round(review.rating) ? "currentColor" : "none"} />
+                    <Star
+                      key={index}
+                      size={14}
+                      fill={
+                        index < Math.round(review.rating)
+                          ? "currentColor"
+                          : "none"
+                      }
+                    />
                   ))}
                 </span>
-                <span className="font-semibold text-(--ink)">{review.rating}/5</span>
+                <span className="font-semibold text-(--ink)">
+                  {review.rating}/5
+                </span>
               </div>
             </div>
           </header>
@@ -271,7 +313,9 @@ export function ReviewDetailPage({
                 <p className="text-xs uppercase tracking-[.12em] text-(--ink-muted)">
                   Nota da comunidade
                 </p>
-                <p className="display mt-2 text-4xl leading-none">{game.score.toFixed(1)}</p>
+                <p className="display mt-2 text-4xl leading-none">
+                  {game.score.toFixed(1)}
+                </p>
               </div>
               <Link
                 href={`/discover/games/${game.slug}`}
