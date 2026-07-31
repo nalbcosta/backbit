@@ -118,6 +118,29 @@ body {
 .landing-page > .landing-section:first-child {
   min-height: calc(100svh - 4.5rem);
 }
+.discover-shell {
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scroll-behavior: smooth;
+  scroll-snap-type: y proximity;
+}
+.discover-section {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+}
+.discover-games-section {
+  gap: 3rem;
+  min-height: calc(100svh + 4rem);
+}
+.discover-page .discover-section:first-child {
+  min-height: calc(100svh - 4rem);
+}
 .hero-contours {
   color: var(--ink-muted);
   opacity: 0.24;
@@ -209,6 +232,20 @@ button{
 .discover-cover-forest { background: linear-gradient(145deg, #3e635a, #1e2926 82%); }
 .discover-cover-night { background: linear-gradient(145deg, #394a70, #1c202e 82%); }
 .discover-cover-gold { background: linear-gradient(145deg, #9a7040, #3d3023 82%); }
+.discover-carousel-track {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.discover-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+.discover-filter-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.discover-filter-scroll::-webkit-scrollbar {
+  display: none;
+}
 
 @media (min-width: 768px) {
   .section {
