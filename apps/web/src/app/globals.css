@@ -246,6 +246,14 @@ button{
 .discover-filter-scroll::-webkit-scrollbar {
   display: none;
 }
+.detail-page {
+  padding-bottom: 1.5rem;
+}
+@media (min-width: 768px) {
+  .detail-page {
+    padding-bottom: 3rem;
+  }
+}
 
 @media (min-width: 768px) {
   .section {

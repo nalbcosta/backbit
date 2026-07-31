@@ -35,7 +35,7 @@ function DetailLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <DiscoverHeader />
-      <main className="min-h-[calc(100svh-4rem)]">{children}</main>
+      <main className="detail-page min-h-[calc(100svh-4rem)]">{children}</main>
       <DiscoverFooter />
     </>
   );
@@ -44,11 +44,11 @@ function DetailLayout({ children }: { children: ReactNode }) {
 export function GameDetailPage({ game }: { game: DiscoverGame }) {
   return (
     <DetailLayout>
-      <Container className="py-6 sm:py-10">
+      <Container className="py-8 sm:py-12 lg:py-16">
         <BackToDiscover />
         <section className="mt-8 grid gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
           <div
-            className={`discover-cover discover-cover-${game.coverTone} relative min-h-104 overflow-hidden rounded-3xl p-5 text-white sm:min-h-136`}
+            className={`order-2 discover-cover discover-cover-${game.coverTone} relative min-h-64 overflow-hidden rounded-3xl p-5 text-white sm:min-h-136 lg:order-1`}
           >
             <div className="relative z-10 flex items-start justify-between gap-4">
               <Badge variant="inverse">{game.score.toFixed(1)} no Backbit</Badge>
@@ -60,7 +60,7 @@ export function GameDetailPage({ game }: { game: DiscoverGame }) {
               <p className="text-xs font-semibold uppercase tracking-[.14em] text-white/70">
                 Uma escolha para agora
               </p>
-              <p className="display mt-2 text-4xl leading-none sm:text-5xl">
+              <p className="display mt-2 max-w-sm text-3xl leading-[.95] sm:text-5xl">
                 {game.note}
               </p>
             </div>
@@ -68,14 +68,14 @@ export function GameDetailPage({ game }: { game: DiscoverGame }) {
             <div className="pointer-events-none absolute -bottom-16 -right-8 size-44 rounded-full border border-white/15" />
           </div>
 
-          <div>
+          <div className="order-1 lg:order-2">
             <p className="eyebrow">
               {game.studio} · {game.year}
             </p>
-            <h1 className="display mt-4 max-w-2xl text-6xl leading-[.88] sm:text-7xl">
+            <h1 className="display mt-4 max-w-2xl text-5xl leading-[.9] sm:text-6xl lg:text-7xl">
               {game.title}
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-(--ink-muted) sm:text-lg">
+            <p className="mt-5 max-w-xl text-base leading-7 text-(--ink-muted) sm:mt-6 sm:text-lg">
               {game.summary}
             </p>
 
@@ -91,7 +91,7 @@ export function GameDetailPage({ game }: { game: DiscoverGame }) {
             </div>
 
             <dl className="mt-8 grid grid-cols-2 gap-5 border-y border-(--line) py-5 sm:grid-cols-3">
-              <div>
+              <div className="col-span-2 sm:col-span-1">
                 <dt className="flex items-center gap-2 text-xs uppercase tracking-[.12em] text-(--ink-muted)">
                   <Star aria-hidden="true" size={14} /> Nota
                 </dt>
@@ -115,7 +115,7 @@ export function GameDetailPage({ game }: { game: DiscoverGame }) {
 
             <Link
               href="/register"
-              className="mt-7 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-(--action-bg) px-5 text-sm font-semibold text-(--action-fg) transition-colors hover:bg-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+              className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-(--action-bg) px-5 text-sm font-semibold text-(--action-fg) transition-colors hover:bg-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:w-auto"
             >
               <BookmarkPlus aria-hidden="true" size={17} />
               Salvar no meu Backbit
@@ -126,12 +126,12 @@ export function GameDetailPage({ game }: { game: DiscoverGame }) {
         <section className="mt-14 grid gap-8 border-t border-(--line) pt-8 sm:mt-20 sm:grid-cols-[.8fr_1.2fr] sm:gap-16">
           <div>
             <p className="eyebrow">O que fica</p>
-            <h2 className="display mt-3 text-4xl leading-[.95]">
-              Um jogo para lembrar do ritmo.
+            <h2 className="display mt-3 max-w-md text-4xl leading-[.95]">
+              Cabe no seu momento.
             </h2>
           </div>
-          <p className="max-w-2xl text-base leading-7 text-(--ink-muted)">
-            {game.note} {game.summary}
+          <p className="max-w-2xl text-base leading-7 text-(--ink-muted) sm:text-lg">
+            {game.note}
           </p>
         </section>
       </Container>
@@ -148,7 +148,7 @@ export function CollectionDetailPage({
 }) {
   return (
     <DetailLayout>
-      <Container className="py-6 sm:py-10">
+      <Container className="py-8 sm:py-12 lg:py-16">
         <BackToDiscover />
         <section className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end lg:gap-16">
           <div>
@@ -226,31 +226,40 @@ export function ReviewDetailPage({
 }) {
   return (
     <DetailLayout>
-      <Container className="py-6 sm:py-10">
+      <Container className="py-8 sm:py-12 lg:py-16">
         <BackToDiscover />
         <article className="mx-auto mt-10 max-w-5xl">
-          <header className="max-w-3xl">
+          <header className="max-w-4xl">
             <p className="eyebrow">
               Review de {game.title} · {review.publishedAt}
             </p>
-            <h1 className="display mt-4 text-5xl leading-[.9] sm:text-7xl">
+            <h1 className="display mt-4 max-w-3xl text-4xl leading-[.94] sm:text-6xl lg:text-7xl">
               {review.slug.replaceAll("-", " ")}
             </h1>
-            <p className="mt-6 text-sm font-semibold">
-              Por {review.author} · {review.rating}/5
-            </p>
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3 text-sm">
+              <p className="font-semibold">Por {review.author}</p>
+              <span className="h-1 w-1 rounded-full bg-(--line)" aria-hidden="true" />
+              <div className="flex items-center gap-2 text-(--accent)" aria-label={`Nota ${review.rating} de 5`}>
+                <span className="flex gap-0.5" aria-hidden="true">
+                  {Array.from({ length: 5 }, (_, index) => (
+                    <Star key={index} size={14} fill={index < Math.round(review.rating) ? "currentColor" : "none"} />
+                  ))}
+                </span>
+                <span className="font-semibold text-(--ink)">{review.rating}/5</span>
+              </div>
+            </div>
           </header>
 
-          <div className="mt-12 grid gap-10 lg:grid-cols-[1.2fr_.8fr] lg:items-start lg:gap-20">
+          <div className="mt-10 grid gap-10 sm:mt-14 lg:grid-cols-[1.2fr_.8fr] lg:items-start lg:gap-20">
             <div>
-              <blockquote className="display border-l-2 border-(--accent) pl-6 text-4xl leading-[1.02] sm:text-5xl">
+              <blockquote className="display border-l-2 border-(--accent) pl-5 text-3xl leading-[1.06] sm:pl-6 sm:text-5xl sm:leading-[1.02]">
                 “{review.excerpt}”
               </blockquote>
-              <p className="mt-10 max-w-2xl text-lg leading-8 text-(--ink-muted)">
+              <p className="mt-8 max-w-2xl border-t border-(--line) pt-8 text-base leading-7 text-(--ink-muted) sm:mt-10 sm:pt-10 sm:text-lg sm:leading-8">
                 {review.body}
               </p>
             </div>
-            <Card className="rounded-2xl p-5 sm:p-6">
+            <Card className="rounded-2xl p-5 sm:p-6 lg:sticky lg:top-24">
               <p className="eyebrow">Sobre o jogo</p>
               <h2 className="display mt-4 text-4xl leading-none">
                 {game.title}
@@ -258,6 +267,12 @@ export function ReviewDetailPage({
               <p className="mt-3 text-sm leading-6 text-(--ink-muted)">
                 {game.studio} · {game.year}
               </p>
+              <div className="mt-6 border-t border-(--line) pt-5">
+                <p className="text-xs uppercase tracking-[.12em] text-(--ink-muted)">
+                  Nota da comunidade
+                </p>
+                <p className="display mt-2 text-4xl leading-none">{game.score.toFixed(1)}</p>
+              </div>
               <Link
                 href={`/discover/games/${game.slug}`}
                 className="mt-7 inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4 hover:text-(--accent)"
