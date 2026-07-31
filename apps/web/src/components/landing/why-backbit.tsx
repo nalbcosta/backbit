@@ -7,7 +7,7 @@ const reasons = [
 ];
 export function WhyBackbit() {
   return (
-    <section className="section">
+    <section className="landing-section section">
       <Container className="grid gap-10 lg:grid-cols-2">
         <SectionHeading
           eyebrow="Por que Backbit?"

@@ -52,7 +52,7 @@ const columns: readonly KanbanColumn[] = [
 
 export function BoardPreview() {
   return (
-    <section className="section">
+    <section className="landing-section section">
       <Container>
         <div className="grid gap-10 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
           <SectionHeading

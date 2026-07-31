@@ -1,0 +1,52 @@
+import { ArrowUpRight, Eye } from "lucide-react";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
+import type { DiscoverGame } from "@/lib/discover/types";
+
+type GameCardProps = {
+  game: DiscoverGame;
+  onPreview: (game: DiscoverGame) => void;
+};
+export function DiscoverGameCard({ game, onPreview }: GameCardProps) {
+  return (
+    <Card className="group overflow-hidden rounded-2xl">
+      <div
+        className={`discover-cover discover-cover-${game.coverTone} flex min-h-44 flex-col justify-between p-4 text-white`}
+      >
+        <div className="flex justify-between">
+          <Badge variant="inverse">{game.score.toFixed(1)}</Badge>
+          <span className="text-xs font-semibold uppercase tracking-[.12em]">
+            {game.duration}
+          </span>
+        </div>
+        <p className="max-w-48 text-sm leading-5 text-white/80">{game.note}</p>
+      </div>
+      <div className="p-5">
+        <p className="text-xs font-semibold uppercase tracking-[.12em] text-(--ink-muted)">
+          {game.studio} · {game.year}
+        </p>
+        <h3 className="display mt-2 text-3xl leading-none">{game.title}</h3>
+        <p className="mt-3 text-sm leading-6 text-(--ink-muted)">
+          {game.summary}
+        </p>
+        <div className="mt-5 flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => onPreview(game)}
+            className="inline-flex min-h-10 items-center gap-2 text-sm font-semibold hover:text-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+          >
+            <Eye aria-hidden="true" size={16} /> Prévia
+          </button>
+          <Link
+            href={`/discover/games/${game.slug}`}
+            aria-label={`Abrir ${game.title}`}
+            className="inline-flex size-10 items-center justify-center rounded-full border border-(--line) transition-colors hover:bg-(--action-bg) hover:text-(--action-fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+          >
+            <ArrowUpRight aria-hidden="true" size={17} />
+          </Link>
+        </div>
+      </div>
+    </Card>
+  );
+}

@@ -24,22 +24,38 @@ export function ThemeToggle() {
 
   const nextTheme: Theme = theme === "light" ? "dark" : "light";
   const label = theme === "light" ? "Ativar modo escuro" : "Ativar modo claro";
-  const ThemeIcon = theme === "light" ? Moon : Sun;
-
-  function toggleTheme() {
-    setTheme(nextTheme);
-    applyTheme(nextTheme);
-  }
 
   return (
     <button
       type="button"
       aria-label={label}
       aria-pressed={theme === "dark"}
-      onClick={toggleTheme}
-      className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[var(--line)] px-3 text-xs font-semibold text-[var(--ink)] transition-colors hover:border-[var(--ink)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+      onClick={() => {
+        setTheme(nextTheme);
+        applyTheme(nextTheme);
+      }}
+      className="inline-flex min-h-10 w-auto p-3 items-center gap-2 rounded-full aspect-auto border border-(--line) text-xs font-semibold text-(--ink) transition-colors hover:border-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
     >
-      <ThemeIcon aria-hidden="true" size={16} strokeWidth={1.75} />
+      <span className="relative size-4.5" aria-hidden="true">
+        <Moon
+          size={18}
+          strokeWidth={1.25}
+          className={`absolute inset-0 transition-all duration-300 ease-out ${
+            theme === "light"
+              ? "rotate-0 scale-100 opacity-100"
+              : "rotate-90 scale-0 opacity-0"
+          }`}
+        />
+        <Sun
+          size={18}
+          strokeWidth={1.25}
+          className={`absolute inset-0 transition-all duration-300 ease-out ${
+            theme === "dark"
+              ? "rotate-0 scale-100 opacity-100"
+              : "-rotate-90 scale-0 opacity-0"
+          }`}
+        />
+      </span>
     </button>
   );
 }
