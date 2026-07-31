@@ -2,8 +2,16 @@ import { Quote } from "lucide-react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import type { DiscoverGame, DiscoverReview } from "@/lib/discover/types";
-type ReviewCardProps = { review: DiscoverReview; game: DiscoverGame };
-export function ReviewCard({ review, game }: ReviewCardProps) {
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
+type ReviewCardProps = {
+  review: DiscoverReview;
+  game: DiscoverGame;
+  scope: DiscoverScope;
+};
+export function ReviewCard({ review, game, scope }: ReviewCardProps) {
   return (
     <Card className="flex h-full min-h-80 flex-col rounded-2xl p-5">
       <Quote aria-hidden="true" size={22} className="text-(--accent)" />
@@ -18,7 +26,7 @@ export function ReviewCard({ review, game }: ReviewCardProps) {
           </p>
         </div>
         <Link
-          href={`/discover/reviews/${review.slug}`}
+          href={getDiscoverRoutes(scope).review(review.slug)}
           className="text-sm font-semibold underline underline-offset-4 hover:text-(--accent)"
         >
           Ler

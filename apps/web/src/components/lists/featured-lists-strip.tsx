@@ -1,11 +1,18 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { DiscoverCollection } from "@/lib/discover/types";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 export function FeaturedListsStrip({
   collections,
+  scope,
 }: {
   collections: readonly DiscoverCollection[];
+  scope: DiscoverScope;
 }) {
+  const routes = getDiscoverRoutes(scope);
   if (!collections.length) return null;
   return (
     <section
@@ -30,7 +37,7 @@ export function FeaturedListsStrip({
         {collections.map((collection) => (
           <Link
             key={collection.id}
-            href={`/discover/lists/${collection.slug}?from=/discover/lists`}
+            href={`${routes.list(collection.slug)}?from=${routes.lists}`}
             className={`discover-cover discover-cover-${collection.coverTone ?? "night"} min-h-52 w-[78vw] shrink-0 snap-start rounded-2xl p-5 text-white sm:w-auto`}
           >
             <p className="text-xs font-semibold uppercase tracking-[.12em] text-white/70">

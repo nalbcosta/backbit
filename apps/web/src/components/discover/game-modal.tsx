@@ -3,8 +3,16 @@ import Link from "next/link";
 import { Dialog } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import type { DiscoverGame } from "@/lib/discover/types";
-type GameModalProps = { game: DiscoverGame | null; onClose: () => void };
-export function GameModal({ game, onClose }: GameModalProps) {
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
+type GameModalProps = {
+  game: DiscoverGame | null;
+  onClose: () => void;
+  scope: DiscoverScope;
+};
+export function GameModal({ game, onClose, scope }: GameModalProps) {
   return (
     <Dialog
       open={Boolean(game)}
@@ -39,7 +47,7 @@ export function GameModal({ game, onClose }: GameModalProps) {
             </div>
           </dl>
           <Link
-            href={`/discover/games/${game.slug}`}
+            href={getDiscoverRoutes(scope).game(game.slug)}
             className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold underline underline-offset-4 hover:text-(--accent)"
           >
             Ver página do jogo <ArrowUpRight aria-hidden="true" size={16} />

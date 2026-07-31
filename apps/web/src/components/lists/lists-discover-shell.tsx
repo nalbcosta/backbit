@@ -12,14 +12,15 @@ import { ListsFilterBar } from "./lists-filter-bar";
 import { ListsGrid } from "./lists-grid";
 import { ListsPagination } from "./lists-pagination";
 import { ListsResultsHeader } from "./lists-results-header";
-export function ListsDiscoverShell() {
+import type { DiscoverScope } from "@/lib/discover/discover-routes";
+export function ListsDiscoverShell({ scope }: { scope: DiscoverScope }) {
   const { filters, update } = useListsDiscoverParams();
   const results = useListsFilters(filters);
   const featured = discoverCollections.filter((list) => list.featured);
   return (
     <div className="flex min-h-dvh flex-col">
-      <GamesDiscoverHeader />
-      <main className="flex-1">
+      {scope === "public" && <GamesDiscoverHeader />}
+      <div className="flex-1">
         <Container className="flex flex-col gap-12 py-8 sm:gap-16 sm:py-12">
           <header className="max-w-3xl">
             <p className="eyebrow">Descobrir · Listas</p>
@@ -31,7 +32,7 @@ export function ListsDiscoverShell() {
               apenas a vontade de encontrar algo diferente.
             </p>
           </header>
-          <FeaturedListsStrip collections={featured} />
+          <FeaturedListsStrip collections={featured} scope={scope} />
           <div id="results" className="flex flex-col gap-7">
             <div className="hidden lg:block">
               <ListsFilterBar filters={filters} onChange={update} />
@@ -42,7 +43,7 @@ export function ListsDiscoverShell() {
               onChange={update}
             />
             {results.items.length ? (
-              <ListsGrid collections={results.items} />
+              <ListsGrid collections={results.items} scope={scope} />
             ) : (
               <EmptyListsResults
                 onClear={() => update(listsDiscoverDefaults)}
@@ -55,8 +56,8 @@ export function ListsDiscoverShell() {
             />
           </div>
         </Container>
-      </main>
-      <DiscoverFooter />
+      </div>
+      {scope === "public" && <DiscoverFooter />}
     </div>
   );
 }

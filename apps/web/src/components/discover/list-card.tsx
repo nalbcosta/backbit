@@ -2,8 +2,12 @@ import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import { Card } from "@/components/ui/card";
 import type { DiscoverCollection } from "@/lib/discover/types";
-type ListCardProps = { collection: DiscoverCollection };
-export function ListCard({ collection }: ListCardProps) {
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
+type ListCardProps = { collection: DiscoverCollection; scope: DiscoverScope };
+export function ListCard({ collection, scope }: ListCardProps) {
   return (
     <Card className="flex min-h-60 flex-col justify-between rounded-2xl p-5">
       <div>
@@ -18,7 +22,7 @@ export function ListCard({ collection }: ListCardProps) {
         </p>
       </div>
       <Link
-        href={`/discover/lists/${collection.slug}`}
+        href={`${getDiscoverRoutes(scope).list(collection.slug)}?from=${getDiscoverRoutes(scope).lists}`}
         className="mt-6 inline-flex items-center gap-2 self-start text-sm font-semibold hover:text-(--accent)"
       >
         Abrir lista <ArrowUpRight aria-hidden="true" size={16} />

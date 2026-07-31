@@ -19,7 +19,7 @@ type NavigationItem = {
 const navigationItems: readonly NavigationItem[] = [
   { label: "Início", icon: House, href: "/app" },
   { label: "Board", icon: LayoutGrid, href: "/board" },
-  { label: "Descobrir", icon: Compass, href: "/discover" },
+  { label: "Descobrir", icon: Compass, href: "/app/discover" },
   { label: "Perfil", icon: UserRound },
 ] as const;
 

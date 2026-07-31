@@ -6,13 +6,19 @@ import { useEffect, useRef, useState } from "react";
 
 import type { DiscoverGame } from "@/lib/discover/types";
 import { DiscoverGameCard } from "@/components/discover/game-card";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 type FeaturedRecommendationsProps = {
   games: readonly DiscoverGame[];
   onPreview: (game: DiscoverGame) => void;
+  scope: DiscoverScope;
 };
 export function FeaturedRecommendations({
   games,
   onPreview,
+  scope,
 }: FeaturedRecommendationsProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const slideRefs = useRef<Array<HTMLDivElement | null>>([]);
@@ -70,7 +76,7 @@ export function FeaturedRecommendations({
           — sem uma prateleira infinita no caminho.
         </p>
         <Link
-          href="/discover/games"
+          href={getDiscoverRoutes(scope).games}
           className="text-sm font-semibold text-(--ink) underline underline-offset-4 hover:text-(--accent)"
         >
           Explorar todos os jogos
@@ -121,7 +127,7 @@ export function FeaturedRecommendations({
             }}
             className="w-[calc(100%-1.5rem)] shrink-0 snap-start sm:w-[calc(50%-0.5rem)] md:w-auto"
           >
-            <DiscoverGameCard game={game} onPreview={onPreview} />
+            <DiscoverGameCard game={game} onPreview={onPreview} scope={scope} />
           </div>
         ))}
       </div>

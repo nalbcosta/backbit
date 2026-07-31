@@ -19,6 +19,10 @@ import type {
   DiscoverGame,
   DiscoverReview,
 } from "@/lib/discover/types";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 
 function BackToDiscover({
   href = "/discover",
@@ -37,7 +41,15 @@ function BackToDiscover({
   );
 }
 
-function DetailLayout({ children }: { children: ReactNode }) {
+function DetailLayout({
+  children,
+  scope,
+}: {
+  children: ReactNode;
+  scope: DiscoverScope;
+}) {
+  if (scope === "private") return <div className="detail-page">{children}</div>;
+
   return (
     <>
       <DiscoverHeader />
@@ -50,18 +62,19 @@ function DetailLayout({ children }: { children: ReactNode }) {
 export function GameDetailPage({
   game,
   backHref = "/discover",
+  scope,
 }: {
   game: DiscoverGame;
   backHref?: string;
+  scope: DiscoverScope;
 }) {
+  const routes = getDiscoverRoutes(scope);
   return (
-    <DetailLayout>
+    <DetailLayout scope={scope}>
       <Container className="py-8 sm:py-12 lg:py-16">
         <BackToDiscover
           href={backHref}
-          label={
-            backHref === "/discover/games" ? "Voltar para catálogo" : undefined
-          }
+          label={backHref === routes.games ? "Voltar para catálogo" : undefined}
         />
         <section className="mt-8 grid gap-8 lg:grid-cols-[.85fr_1.15fr] lg:items-center lg:gap-16">
           <div
@@ -132,13 +145,15 @@ export function GameDetailPage({
               </div>
             </dl>
 
-            <Link
-              href="/register"
-              className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-(--action-bg) px-5 text-sm font-semibold text-(--action-fg) transition-colors hover:bg-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:w-auto"
-            >
-              <BookmarkPlus aria-hidden="true" size={17} />
-              Salvar no meu Backbit
-            </Link>
+            {scope === "public" && (
+              <Link
+                href="/register"
+                className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-(--action-bg) px-5 text-sm font-semibold text-(--action-fg) transition-colors hover:bg-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:w-auto"
+              >
+                <BookmarkPlus aria-hidden="true" size={17} />
+                Salvar no meu Backbit
+              </Link>
+            )}
           </div>
         </section>
 
@@ -162,19 +177,20 @@ export function CollectionDetailPage({
   collection,
   games,
   backHref = "/discover",
+  scope,
 }: {
   collection: DiscoverCollection;
   games: readonly DiscoverGame[];
   backHref?: string;
+  scope: DiscoverScope;
 }) {
+  const routes = getDiscoverRoutes(scope);
   return (
-    <DetailLayout>
+    <DetailLayout scope={scope}>
       <Container className="py-8 sm:py-12 lg:py-16">
         <BackToDiscover
           href={backHref}
-          label={
-            backHref === "/discover/lists" ? "Voltar para listas" : undefined
-          }
+          label={backHref === routes.lists ? "Voltar para listas" : undefined}
         />
         <section className="mt-10 grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-end lg:gap-16">
           <div>
@@ -218,7 +234,7 @@ export function CollectionDetailPage({
                 </span>
                 <div>
                   <Link
-                    href={`/discover/games/${game.slug}`}
+                    href={routes.game(game.slug)}
                     className="display text-3xl leading-none transition-colors hover:text-(--accent)"
                   >
                     {game.title}
@@ -228,7 +244,7 @@ export function CollectionDetailPage({
                   </p>
                 </div>
                 <Link
-                  href={`/discover/games/${game.slug}`}
+                  href={routes.game(game.slug)}
                   aria-label={`Abrir ${game.title}`}
                   className="inline-flex size-11 items-center justify-center rounded-full border border-(--line) transition-colors hover:bg-(--action-bg) hover:text-(--action-fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) sm:justify-self-end"
                 >
@@ -246,12 +262,15 @@ export function CollectionDetailPage({
 export function ReviewDetailPage({
   review,
   game,
+  scope,
 }: {
   review: DiscoverReview;
   game: DiscoverGame;
+  scope: DiscoverScope;
 }) {
+  const routes = getDiscoverRoutes(scope);
   return (
-    <DetailLayout>
+    <DetailLayout scope={scope}>
       <Container className="py-8 sm:py-12 lg:py-16">
         <BackToDiscover />
         <article className="mx-auto mt-10 max-w-5xl">
@@ -318,7 +337,7 @@ export function ReviewDetailPage({
                 </p>
               </div>
               <Link
-                href={`/discover/games/${game.slug}`}
+                href={routes.game(game.slug)}
                 className="mt-7 inline-flex items-center gap-2 text-sm font-semibold underline underline-offset-4 hover:text-(--accent)"
               >
                 Ver jogo <ArrowUpRight aria-hidden="true" size={16} />

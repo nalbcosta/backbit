@@ -14,15 +14,19 @@ import { gamesDiscoverDefaults } from "@/lib/discover/games-discover.types";
 import { useGamesDiscoverParams } from "@/hooks/use-games-discover-params";
 import { useGamesFilters } from "@/hooks/use-games-filters";
 import { DiscoverFooter } from "@/components/discover/discover-footer";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 
-export function GamesDiscoverShell() {
+export function GamesDiscoverShell({ scope }: { scope: DiscoverScope }) {
   const { filters, update } = useGamesDiscoverParams();
   const results = useGamesFilters(filters);
   const featured = discoverGames.filter((game) => game.featured);
   return (
     <div className="flex min-h-dvh flex-col">
-      <GamesDiscoverHeader />
-      <main className="flex-1">
+      {scope === "public" && <GamesDiscoverHeader />}
+      <div className="flex-1">
         <Container className="flex flex-col gap-12 py-8 sm:gap-16 sm:py-12">
           <header className="max-w-3xl">
             <p className="eyebrow">Descobrir · Jogos</p>
@@ -55,7 +59,7 @@ export function GamesDiscoverShell() {
               {featured.map((game) => (
                 <Link
                   key={game.id}
-                  href={`/discover/games/${game.slug}?from=/discover/games`}
+                  href={`${getDiscoverRoutes(scope).game(game.slug)}?from=${getDiscoverRoutes(scope).games}`}
                   className={`discover-cover discover-cover-${game.coverTone} min-h-56 w-[82vw] shrink-0 snap-start rounded-2xl p-6 text-white transition-transform hover:-translate-y-0.5 sm:min-h-64 sm:w-auto lg:min-h-72 lg:p-7`}
                 >
                   <p className="text-xs font-semibold uppercase tracking-[.12em] text-white/70">
@@ -80,7 +84,7 @@ export function GamesDiscoverShell() {
             </div>
             <div>
               {results.items.length ? (
-                <GamesGrid games={results.items} />
+                <GamesGrid games={results.items} scope={scope} />
               ) : (
                 <EmptyResults onClear={() => update(gamesDiscoverDefaults)} />
               )}
@@ -94,8 +98,8 @@ export function GamesDiscoverShell() {
             </div>
           </div>
         </Container>
-      </main>
-      <DiscoverFooter />
+      </div>
+      {scope === "public" && <DiscoverFooter />}
     </div>
   );
 }

@@ -6,11 +6,21 @@ import { useEffect, useState } from "react";
 
 import type { DiscoverCollection } from "@/lib/discover/types";
 import { ListCard } from "@/components/discover/list-card";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 
 const PAGE_SIZE = 2;
 
-type CollectionsSectionProps = { collections: readonly DiscoverCollection[] };
-export function CollectionsSection({ collections }: CollectionsSectionProps) {
+type CollectionsSectionProps = {
+  collections: readonly DiscoverCollection[];
+  scope: DiscoverScope;
+};
+export function CollectionsSection({
+  collections,
+  scope,
+}: CollectionsSectionProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageCount = Math.ceil(collections.length / PAGE_SIZE);
   const safePage = Math.min(currentPage, Math.max(pageCount, 1));
@@ -39,7 +49,7 @@ export function CollectionsSection({ collections }: CollectionsSectionProps) {
           </h2>
         </div>
         <Link
-          href="/discover/lists"
+          href={getDiscoverRoutes(scope).lists}
           className="inline-flex min-h-10 self-start items-center gap-2 rounded-full border border-(--line) px-4 text-xs font-semibold text-(--ink-muted) opacity-75 sm:self-end"
         >
           Ver todas
@@ -51,7 +61,11 @@ export function CollectionsSection({ collections }: CollectionsSectionProps) {
         <>
           <div className="mt-7 grid gap-4 sm:grid-cols-2">
             {visibleCollections.map((collection) => (
-              <ListCard key={collection.id} collection={collection} />
+              <ListCard
+                key={collection.id}
+                collection={collection}
+                scope={scope}
+              />
             ))}
           </div>
           {pageCount > 1 && (
