@@ -13,13 +13,15 @@ jobs:
       node-version: 24
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           cache: 'pnpm'
-      - name: Install pnpm
-        run: npm i -g pnpm@latest
       - name: Install
         run: pnpm install --frozen-lockfile
 
@@ -28,12 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Install pnpm
-        run: npm i -g pnpm@latest
       - name: pnpm install
         run: pnpm install --frozen-lockfile
       - name: Run lint
@@ -44,12 +48,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Install pnpm
-        run: npm i -g pnpm@latest
       - name: pnpm install
         run: pnpm install --frozen-lockfile
       - name: Typecheck
@@ -63,12 +69,14 @@ jobs:
         app: [apps/web, apps/api]
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Install pnpm
-        run: npm i -g pnpm@latest
       - name: Install deps
         run: pnpm install --frozen-lockfile
       - name: Run tests
@@ -80,12 +88,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.18.0
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 24
-      - name: Install pnpm
-        run: npm i -g pnpm@latest
       - name: Install deps
         run: pnpm install --frozen-lockfile
       - name: Build web
