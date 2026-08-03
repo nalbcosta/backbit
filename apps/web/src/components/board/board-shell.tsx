@@ -96,13 +96,14 @@ export function BoardShell() {
 
   useEffect(() => {
     if (!touchDragGameId) return;
+    const dragGameId = touchDragGameId;
     function finishTouchDrag(event: PointerEvent) {
       const target = document
         .elementFromPoint(event.clientX, event.clientY)
         ?.closest<HTMLElement>("[data-drop-target]");
       const status = target?.dataset.dropTarget as BoardStatus | undefined;
       if (status) {
-        moveGame({ gameId: touchDragGameId, destinationStatus: status });
+        moveGame({ gameId: dragGameId, destinationStatus: status });
         setActiveStatus(status);
       }
       setTouchDragGameId(null);

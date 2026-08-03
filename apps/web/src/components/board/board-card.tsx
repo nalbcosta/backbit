@@ -30,7 +30,7 @@ export function BoardCard({
 }: BoardCardProps) {
   const [removeOpen, setRemoveOpen] = useState(false);
   const [dragging, setDragging] = useState(false);
-  const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const longPressTimeout = useRef<number | null>(null);
   function clearLongPress() {
     if (longPressTimeout.current) window.clearTimeout(longPressTimeout.current);
     longPressTimeout.current = null;
