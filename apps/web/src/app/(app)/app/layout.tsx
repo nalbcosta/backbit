@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
 
-import { AppShell } from "@/components/app/app-shell";
-
-export default function PrivateAppLayout({
+/** The private shell is applied by the parent route group. */
+export default function AppRouteLayout({
   children,
 }: Readonly<{ children: ReactNode }>) {
-  return <AppShell>{children}</AppShell>;
+  return children;
 }

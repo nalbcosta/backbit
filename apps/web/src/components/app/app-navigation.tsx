@@ -20,7 +20,7 @@ const navigationItems: readonly NavigationItem[] = [
   { label: "Início", icon: House, href: "/app" },
   { label: "Board", icon: LayoutGrid, href: "/board" },
   { label: "Descobrir", icon: Compass, href: "/app/discover" },
-  { label: "Perfil", icon: UserRound },
+  { label: "Perfil", icon: UserRound, href: "/profile" },
 ] as const;
 
 export function AppNavigation() {
