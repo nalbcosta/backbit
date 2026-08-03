@@ -1,4 +1,5 @@
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, GripVertical } from "lucide-react";
+import { useRef } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
@@ -14,11 +15,50 @@ const coverTones: Record<BoardGame["coverTone"], string> = {
   wine: "linear-gradient(145deg, #6a3225, #403c35 82%)",
 };
 
-type BoardCardProps = { game: BoardGame; onOpen: (gameId: string) => void };
+type BoardCardProps = {
+  game: BoardGame;
+  onOpen: (gameId: string) => void;
+  onDragStart?: (gameId: string) => void;
+  onTouchDragStart?: (gameId: string) => void;
+};
 
-export function BoardCard({ game, onOpen }: BoardCardProps) {
+export function BoardCard({
+  game,
+  onOpen,
+  onDragStart,
+  onTouchDragStart,
+}: BoardCardProps) {
+  const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function clearLongPress() {
+    if (longPressTimeout.current) window.clearTimeout(longPressTimeout.current);
+    longPressTimeout.current = null;
+  }
   return (
-    <Card className="overflow-hidden rounded-2xl transition-colors hover:border-(--ink-muted)">
+    <Card
+      data-game-id={game.id}
+      draggable={Boolean(onDragStart)}
+      onDragStart={(event) => {
+        event.dataTransfer.effectAllowed = "move";
+        event.dataTransfer.setData("text/plain", game.id);
+        onDragStart?.(game.id);
+      }}
+      onPointerDown={(event) => {
+        if (event.pointerType !== "touch" || !onTouchDragStart) return;
+        longPressTimeout.current = window.setTimeout(
+          () => onTouchDragStart(game.id),
+          220,
+        );
+      }}
+      onPointerUp={clearLongPress}
+      onPointerCancel={clearLongPress}
+      className="relative overflow-hidden rounded-2xl transition-colors hover:border-(--ink-muted)"
+    >
+      <span
+        aria-hidden="true"
+        className="absolute bottom-2 left-2 hidden rounded-full bg-(--surface-muted)/90 p-1 text-(--ink-muted) md:block"
+      >
+        <GripVertical size={15} />
+      </span>
       <button
         type="button"
         onClick={() => onOpen(game.id)}

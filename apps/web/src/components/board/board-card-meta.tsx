@@ -1,15 +1,17 @@
 import { Star } from "lucide-react";
 
 import type { BoardGame } from "@/lib/board/board.types";
+import { getGameProgressLabel } from "@/lib/board/board-game-progress";
 
 export function BoardCardMeta({ game }: { game: BoardGame }) {
+  const progressLabel = getGameProgressLabel(game);
   return (
     <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-(--ink-muted)">
       <span>{game.platform}</span>
-      {game.progressLabel && (
+      {progressLabel && (
         <>
           <span aria-hidden="true">·</span>
-          <span>{game.progressLabel}</span>
+          <span>{progressLabel}</span>
         </>
       )}
       {game.rating && (

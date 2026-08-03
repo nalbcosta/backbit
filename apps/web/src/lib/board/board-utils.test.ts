@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { getColumnCounts } from "@/lib/board/get-column-counts";
+import { getGameProgressLabel } from "@/lib/board/board-game-progress";
 import { groupGamesByStatus } from "@/lib/board/group-games-by-status";
 import { mockBoardGames } from "@/lib/board/mock-board-games";
 import { moveGameBetweenColumns } from "@/lib/board/move-game-between-columns";
@@ -31,15 +32,12 @@ describe("utilitários do board", () => {
     });
   });
 
-  it("move um jogo sem alterar a ordem ou os outros itens", () => {
+  it("move um jogo e o posiciona no destino sem alterar os outros status", () => {
     const movedGames = moveGameBetweenColumns(mockBoardGames, {
       gameId: "paper-moon",
       destinationStatus: "playing",
     });
 
-    expect(movedGames.map((game) => game.id)).toEqual(
-      mockBoardGames.map((game) => game.id),
-    );
     expect(movedGames.find((game) => game.id === "paper-moon")?.status).toBe(
       "playing",
     );
@@ -48,19 +46,28 @@ describe("utilitários do board", () => {
     ).toBe("backlog");
   });
 
-  it("mantém a referência quando o jogo não existe ou o status já é o mesmo", () => {
+  it("mantém a referência quando o jogo não existe", () => {
     expect(
       moveGameBetweenColumns(mockBoardGames, {
         gameId: "missing",
         destinationStatus: "playing",
       }),
     ).toBe(mockBoardGames);
-    expect(
-      moveGameBetweenColumns(mockBoardGames, {
-        gameId: "after-winter",
-        destinationStatus: "playing",
-      }),
-    ).toBe(mockBoardGames);
+  });
+
+  it("reordena um jogo dentro da própria coluna", () => {
+    const movedGames = moveGameBetweenColumns(mockBoardGames, {
+      gameId: "low-tide",
+      destinationStatus: "playing",
+      destinationIndex: 0,
+    });
+    const playingGames = movedGames
+      .filter((game) => game.status === "playing")
+      .sort((first, second) => first.position - second.position);
+    expect(playingGames.map((game) => game.id)).toEqual([
+      "low-tide",
+      "after-winter",
+    ]);
   });
 
   it("ordena cópias por título ou última atualização", () => {
@@ -70,5 +77,10 @@ describe("utilitários do board", () => {
     expect(byTitle).not.toBe(mockBoardGames);
     expect(byTitle[0]?.title).toBe("A estrada de sal");
     expect(byUpdate[0]?.id).toBe("after-winter");
+  });
+
+  it("deriva o resumo de progresso a partir das sessões", () => {
+    const game = mockBoardGames.find((item) => item.id === "after-winter");
+    expect(game && getGameProgressLabel(game)).toBe("62% · sessão 1");
   });
 });

@@ -13,6 +13,7 @@ function applyTheme(theme: Theme) {
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("light");
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem(storageKey);
@@ -20,6 +21,7 @@ export function ThemeToggle() {
       setTheme(savedTheme);
       document.documentElement.dataset.theme = savedTheme;
     }
+    setHasHydrated(true);
   }, []);
 
   const nextTheme: Theme = theme === "light" ? "dark" : "light";
@@ -30,6 +32,7 @@ export function ThemeToggle() {
       type="button"
       aria-label={label}
       aria-pressed={theme === "dark"}
+      disabled={!hasHydrated}
       onClick={() => {
         setTheme(nextTheme);
         applyTheme(nextTheme);

@@ -16,12 +16,30 @@ export type BoardGame = {
   coverTone: "ember" | "forest" | "night" | "gold" | "smoke" | "wine";
   platform: string;
   status: BoardStatus;
-  progressLabel?: string;
+  position: number;
+  progressPercent?: number;
+  sessions: readonly PlaySession[];
   rating?: number;
   releaseYear: number;
   tags: readonly string[];
   shortNote?: string;
   updatedAt: string;
+};
+
+export type PlaySession = {
+  id: string;
+  playedOn: string;
+  durationMinutes: number;
+  progressPercent?: number;
+  note?: string;
+};
+
+export type CatalogGame = {
+  id: string;
+  title: string;
+  releaseYear: number;
+  platform: string;
+  coverTone: BoardGame["coverTone"];
 };
 
 export type BoardColumn = {
@@ -37,6 +55,17 @@ export type BoardColumnsByStatus = Record<BoardStatus, readonly BoardGame[]>;
 export type MoveGameCommand = {
   gameId: string;
   destinationStatus: BoardStatus;
+  destinationIndex?: number;
+};
+
+export type AddGameCommand = {
+  game: CatalogGame;
+  destinationStatus: BoardStatus;
+};
+
+export type RegisterSessionCommand = {
+  gameId: string;
+  session: PlaySession;
 };
 
 export type BoardFilters = {
@@ -44,4 +73,4 @@ export type BoardFilters = {
   tags?: readonly string[];
 };
 
-export type BoardSort = "updatedAt" | "title";
+export type BoardSort = "position" | "updatedAt" | "title";

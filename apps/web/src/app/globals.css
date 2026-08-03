@@ -151,7 +151,8 @@ body {
   stroke-width: 1;
 }
 .hero-contours-motion {
-  animation: hero-contours-drift 18s cubic-bezier(.45, 0, .55, 1) infinite alternate;
+  animation: hero-contours-drift 10s cubic-bezier(0.45, 0, 0.55, 1) infinite
+    alternate;
   transform-box: fill-box;
   transform-origin: center;
   will-change: transform;
@@ -174,7 +175,9 @@ body {
     opacity: 0.17;
   }
 }
-a { text-decoration: none; }
+a {
+  text-decoration: none;
+}
 button,
 input {
   font: inherit;
@@ -183,7 +186,7 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
-button{
+button {
   cursor: pointer;
 }
 
@@ -228,10 +231,18 @@ button{
 .discover-cover {
   background: linear-gradient(145deg, #44312d, #171513 82%);
 }
-.discover-cover-ember { background: linear-gradient(145deg, #9b4b34, #342824 82%); }
-.discover-cover-forest { background: linear-gradient(145deg, #3e635a, #1e2926 82%); }
-.discover-cover-night { background: linear-gradient(145deg, #394a70, #1c202e 82%); }
-.discover-cover-gold { background: linear-gradient(145deg, #9a7040, #3d3023 82%); }
+.discover-cover-ember {
+  background: linear-gradient(145deg, #9b4b34, #342824 82%);
+}
+.discover-cover-forest {
+  background: linear-gradient(145deg, #3e635a, #1e2926 82%);
+}
+.discover-cover-night {
+  background: linear-gradient(145deg, #394a70, #1c202e 82%);
+}
+.discover-cover-gold {
+  background: linear-gradient(145deg, #9a7040, #3d3023 82%);
+}
 .discover-carousel-track {
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -244,6 +255,13 @@ button{
   -ms-overflow-style: none;
 }
 .discover-filter-scroll::-webkit-scrollbar {
+  display: none;
+}
+.board-mobile-switcher {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.board-mobile-switcher::-webkit-scrollbar {
   display: none;
 }
 .detail-page {
