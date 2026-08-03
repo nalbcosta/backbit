@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { Bell } from "lucide-react";
-
+import { NotificationCenter } from "@/components/notifications/notification-center";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { APP_NAME } from "@/config/app";
 
@@ -11,9 +10,7 @@ export function AppHeader() {
         <Link href="/app" className="text-sm font-bold tracking-[-.04em]">{APP_NAME}</Link>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <button type="button" aria-label="Notificações indisponíveis nesta versão" disabled className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-full border border-(--line) text-(--ink-muted) disabled:cursor-not-allowed">
-            <Bell aria-hidden="true" size={17} strokeWidth={1.75} />
-          </button>
+          <NotificationCenter />
         </div>
       </div>
     </header>
