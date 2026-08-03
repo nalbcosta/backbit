@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import { getColumnCounts } from "@/lib/board/get-column-counts";
+import { filterBoardGames } from "@/lib/board/filter-board-games";
 import { getGameProgressLabel } from "@/lib/board/board-game-progress";
 import { groupGamesByStatus } from "@/lib/board/group-games-by-status";
 import { mockBoardGames } from "@/lib/board/mock-board-games";
 import { moveGameBetweenColumns } from "@/lib/board/move-game-between-columns";
 import { sortBoardGames } from "@/lib/board/sort-board-games";
+import { getElapsedSessionSeconds } from "@/lib/board/session-timer";
 
 describe("utilitários do board", () => {
   it("agrupa jogos em todos os status, preservando a ordem de entrada", () => {
@@ -82,5 +84,38 @@ describe("utilitários do board", () => {
   it("deriva o resumo de progresso a partir das sessões", () => {
     const game = mockBoardGames.find((item) => item.id === "after-winter");
     expect(game && getGameProgressLabel(game)).toBe("62% · sessão 1");
+  });
+
+  it("filtra por busca, plataforma, tag e status", () => {
+    expect(filterBoardGames(mockBoardGames, { query: "Depois" })).toHaveLength(1);
+    expect(
+      filterBoardGames(mockBoardGames, {
+        platform: "Nintendo Switch",
+        tags: ["plataforma"],
+        status: "paused",
+      }).map((game) => game.id),
+    ).toEqual(["small-suns"]);
+  });
+
+  it("normaliza as posições da coluna de origem ao mover um jogo", () => {
+    const movedGames = moveGameBetweenColumns(mockBoardGames, {
+      gameId: "after-winter",
+      destinationStatus: "backlog",
+    });
+    const playing = movedGames
+      .filter((game) => game.status === "playing")
+      .sort((first, second) => first.position - second.position);
+    expect(playing.map((game) => game.position)).toEqual([0]);
+  });
+
+  it("ordena jogos por progresso, tratando ausência como menor valor", () => {
+    const sorted = sortBoardGames(mockBoardGames, "progress");
+    expect(sorted[0]?.progressPercent).toBe(100);
+    expect(sorted.at(-1)?.progressPercent).toBeUndefined();
+  });
+
+  it("calcula o cronômetro por timestamp e preserva o tempo pausado", () => {
+    expect(getElapsedSessionSeconds(1_000, 90, 91_500)).toBe(90 + 90);
+    expect(getElapsedSessionSeconds(null, 180, 99_999)).toBe(180);
   });
 });

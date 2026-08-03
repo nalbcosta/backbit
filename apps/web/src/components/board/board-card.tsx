@@ -1,25 +1,20 @@
-import { ArrowUpRight, GripVertical, Trash2 } from "lucide-react";
+import { ArrowUpRight, Clock3, GripVertical, Trash2 } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
-import { Dialog } from "@/components/ui/dialog";
+import { GameRemovalDialog } from "@/components/board/game-removal-dialog";
 import type { BoardGame } from "@/lib/board/board.types";
 import { BoardCardMeta } from "@/components/board/board-card-meta";
-
-const coverTones: Record<BoardGame["coverTone"], string> = {
-  ember: "linear-gradient(145deg, #9b4b34, #342824 82%)",
-  forest: "linear-gradient(145deg, #3e635a, #1e2926 82%)",
-  night: "linear-gradient(145deg, #394a70, #1c202e 82%)",
-  gold: "linear-gradient(145deg, #9a7040, #3d3023 82%)",
-  smoke: "linear-gradient(145deg, #44312d, #171513 82%)",
-  wine: "linear-gradient(145deg, #6a3225, #403c35 82%)",
-};
+import { BoardCover } from "@/components/board/board-cover";
+import { boardColumns } from "@/lib/board/mock-board-games";
 
 type BoardCardProps = {
   game: BoardGame;
   onOpen: (gameId: string) => void;
   onRemove: (gameId: string) => void;
+  onMoveGame?: (gameId: string, status: BoardGame["status"]) => void;
+  onRegisterSession?: (gameId: string) => void;
   onDragStart?: (gameId: string) => void;
   onTouchDragStart?: (gameId: string) => void;
 };
@@ -28,10 +23,13 @@ export function BoardCard({
   game,
   onOpen,
   onRemove,
+  onMoveGame,
+  onRegisterSession,
   onDragStart,
   onTouchDragStart,
 }: BoardCardProps) {
   const [removeOpen, setRemoveOpen] = useState(false);
+  const [dragging, setDragging] = useState(false);
   const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   function clearLongPress() {
     if (longPressTimeout.current) window.clearTimeout(longPressTimeout.current);
@@ -42,12 +40,19 @@ export function BoardCard({
       data-game-id={game.id}
       draggable={Boolean(onDragStart)}
       onDragStart={(event) => {
+        setDragging(true);
         event.dataTransfer.effectAllowed = "move";
         event.dataTransfer.setData("text/plain", game.id);
         onDragStart?.(game.id);
       }}
+      onDragEnd={() => setDragging(false)}
       onPointerDown={(event) => {
         if (event.pointerType !== "touch" || !onTouchDragStart) return;
+        if (
+          event.target instanceof Element &&
+          event.target.closest("button, select, input, textarea")
+        )
+          return;
         longPressTimeout.current = window.setTimeout(
           () => onTouchDragStart(game.id),
           220,
@@ -55,7 +60,7 @@ export function BoardCard({
       }}
       onPointerUp={clearLongPress}
       onPointerCancel={clearLongPress}
-      className="relative overflow-hidden rounded-2xl transition-colors hover:border-(--ink-muted)"
+      className={`relative overflow-hidden rounded-2xl transition-all hover:border-(--ink-muted) ${dragging ? "scale-[.98] opacity-45" : ""}`}
     >
       <span
         aria-hidden="true"
@@ -69,11 +74,7 @@ export function BoardCard({
         className="block min-h-36 w-full p-3 pb-11 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-(--accent)"
       >
         <div className="flex gap-3">
-          <div
-            aria-hidden="true"
-            className="h-25 w-[4.6rem] shrink-0 rounded-xl border border-white/15"
-            style={{ background: coverTones[game.coverTone] }}
-          />
+          <BoardCover game={game} className="h-25 w-[4.6rem]" />
           <div className="min-w-0 flex-1 py-0.5">
             <div className="flex items-start justify-between gap-3">
               <Badge className="px-2 py-0.5 text-[.6rem]">
@@ -97,6 +98,40 @@ export function BoardCard({
           </p>
         )}
       </button>
+      <div className="absolute bottom-2 left-2 flex items-center gap-1">
+        {onMoveGame && (
+          <label className="sr-only" htmlFor={`move-${game.id}`}>
+            Mover {game.title}
+          </label>
+        )}
+        {onMoveGame && (
+          <select
+            id={`move-${game.id}`}
+            aria-label={`Mover ${game.title}`}
+            value={game.status}
+            onChange={(event) =>
+              onMoveGame(game.id, event.target.value as BoardGame["status"])
+            }
+            className="h-8 max-w-28 rounded-full border border-(--line) bg-(--surface-muted) px-2 text-[.65rem] font-semibold text-(--ink-muted) outline-none focus:border-(--accent)"
+          >
+            {boardColumns.map((column) => (
+              <option key={column.key} value={column.key}>
+                {column.title}
+              </option>
+            ))}
+          </select>
+        )}
+        {onRegisterSession && (
+          <button
+            type="button"
+            aria-label={`Registrar sessão de ${game.title}`}
+            onClick={() => onRegisterSession(game.id)}
+            className="inline-flex size-8 items-center justify-center rounded-full bg-(--surface-muted) text-(--ink-muted) hover:text-(--ink)"
+          >
+            <Clock3 aria-hidden="true" size={15} />
+          </button>
+        )}
+      </div>
       <button
         type="button"
         aria-label={`Remover ${game.title}`}
@@ -106,34 +141,15 @@ export function BoardCard({
       >
         <Trash2 aria-hidden="true" size={15} />
       </button>
-      <Dialog
+      <GameRemovalDialog
+        gameTitle={game.title}
         open={removeOpen}
         onClose={() => setRemoveOpen(false)}
-        title="Remover jogo?"
-      >
-        <p className="text-sm leading-6 text-(--ink-muted)">
-          Tem certeza que deseja remover <strong className="text-(--ink)">{game.title}</strong> do seu Kanban?
-        </p>
-        <div className="mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-          <button
-            type="button"
-            onClick={() => setRemoveOpen(false)}
-            className="min-h-11 rounded-full border border-(--line) px-4 text-sm font-semibold hover:bg-(--surface-muted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-          >
-            Cancelar
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              onRemove(game.id);
-              setRemoveOpen(false);
-            }}
-            className="min-h-11 rounded-full bg-(--accent) px-4 text-sm font-semibold text-(--accent-ink) hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-          >
-            Remover
-          </button>
-        </div>
-      </Dialog>
+        onConfirm={() => {
+          onRemove(game.id);
+          setRemoveOpen(false);
+        }}
+      />
     </Card>
   );
 }

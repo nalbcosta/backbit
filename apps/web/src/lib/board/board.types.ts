@@ -14,6 +14,7 @@ export type BoardGame = {
   slug: string;
   title: string;
   coverTone: "ember" | "forest" | "night" | "gold" | "smoke" | "wine";
+  coverUrl?: string;
   platform: string;
   status: BoardStatus;
   position: number;
@@ -40,6 +41,7 @@ export type CatalogGame = {
   releaseYear: number;
   platform: string;
   coverTone: BoardGame["coverTone"];
+  coverUrl?: string;
 };
 
 export type BoardColumn = {
@@ -69,8 +71,10 @@ export type RegisterSessionCommand = {
 };
 
 export type BoardFilters = {
+  query?: string;
   platform?: string;
   tags?: readonly string[];
+  status?: BoardStatus;
 };
 
-export type BoardSort = "position" | "updatedAt" | "title";
+export type BoardSort = "position" | "updatedAt" | "title" | "progress";

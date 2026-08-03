@@ -19,13 +19,22 @@ export function moveGameBetweenColumns(
       destinationGames.length,
     ),
   );
-  const movedGame = { ...game, status: command.destinationStatus };
+  const movedGame = {
+    ...game,
+    status: command.destinationStatus,
+    updatedAt: new Date().toISOString(),
+  };
   const destinationIds = destinationGames.map((item) => item.id);
   destinationIds.splice(destinationIndex, 0, movedGame.id);
-
-  return withoutGame.concat(movedGame).map((item) => {
-    if (item.status !== command.destinationStatus) return item;
-    const nextPosition = destinationIds.indexOf(item.id);
-    return { ...item, position: nextPosition };
+  const nextGames = withoutGame.concat(movedGame);
+  return nextGames.map((item) => {
+    const columnGames = nextGames
+      .filter((candidate) => candidate.status === item.status)
+      .sort((first, second) => first.position - second.position);
+    const orderedIds =
+      item.status === command.destinationStatus
+        ? destinationIds
+        : columnGames.map((candidate) => candidate.id);
+    return { ...item, position: orderedIds.indexOf(item.id) };
   });
 }

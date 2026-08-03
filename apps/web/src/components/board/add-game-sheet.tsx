@@ -43,7 +43,12 @@ export function AddGameSheet({
     [catalog, query],
   );
   return (
-    <Dialog open={open} onClose={onClose} title="Adicionar um jogo">
+    <Dialog
+      open={open}
+      onClose={onClose}
+      title="Adicionar um jogo"
+      description="Escolha um jogo da biblioteca e o status inicial no Kanban."
+    >
       <p className="text-sm leading-6 text-(--ink-muted)">
         Escolha onde esse jogo começa. Você poderá mudar depois.
       </p>

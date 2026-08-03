@@ -38,6 +38,7 @@ export function GameSheet({
         open={game !== null}
         onClose={onClose}
         title={game?.title ?? "Jogo"}
+        description="Detalhes, sessões e ações disponíveis para este jogo."
       >
         {game && (
         <div>
@@ -167,6 +168,7 @@ export function GameSheet({
         open={sessionToDelete !== null}
         onClose={() => setSessionToDelete(null)}
         title="Excluir sessão?"
+        description="Confirmação para excluir um registro de sessão."
       >
         {sessionToDelete && (
           <>

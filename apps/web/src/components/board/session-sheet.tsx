@@ -10,12 +10,26 @@ export function SessionSheet({
   initialSession,
   onClose,
   onSave,
+  timerSeconds,
+  timerRunning,
+  onStartTimer,
+  onPauseTimer,
+  onResumeTimer,
+  onFinishTimer,
+  onDiscardTimer,
 }: {
   open: boolean;
   gameTitle: string;
   initialSession: PlaySession | null;
   onClose: () => void;
   onSave: (session: PlaySession) => void;
+  timerSeconds: number;
+  timerRunning: boolean;
+  onStartTimer: () => void;
+  onPauseTimer: () => void;
+  onResumeTimer: () => void;
+  onFinishTimer: () => void;
+  onDiscardTimer: () => void;
 }) {
   const [playedOn, setPlayedOn] = useState(() =>
     initialSession?.playedOn ?? new Date().toISOString().slice(0, 10),
@@ -26,8 +40,7 @@ export function SessionSheet({
   );
   const [note, setNote] = useState(initialSession?.note ?? "");
   const [error, setError] = useState("");
-  const [timerSeconds, setTimerSeconds] = useState(0);
-  const [timerRunning, setTimerRunning] = useState(false);
+  const [closeConfirmOpen, setCloseConfirmOpen] = useState(false);
 
   useEffect(() => {
     if (!open) return;
@@ -38,17 +51,7 @@ export function SessionSheet({
     setProgress(initialSession?.progressPercent?.toString() ?? "");
     setNote(initialSession?.note ?? "");
     setError("");
-    setTimerSeconds(0);
-    setTimerRunning(false);
   }, [initialSession, open]);
-
-  useEffect(() => {
-    if (!timerRunning) return;
-    const timer = window.setInterval(() => {
-      setTimerSeconds((seconds) => seconds + 1);
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [timerRunning]);
 
   const isEditing = initialSession !== null;
   function handleSave() {
@@ -73,7 +76,7 @@ export function SessionSheet({
       progressPercent: normalizedProgress,
       note: note.trim() || undefined,
     });
-    setTimerRunning(false);
+    if (timerSeconds > 0) onFinishTimer();
     onClose();
   }
 
@@ -86,11 +89,25 @@ export function SessionSheet({
   function applyTimerDuration() {
     if (timerSeconds === 0) return;
     setDuration(Math.max(1, Math.ceil(timerSeconds / 60)));
-    setTimerRunning(false);
+    onPauseTimer();
+  }
+
+  function handleCloseRequest() {
+    if (timerRunning) {
+      setCloseConfirmOpen(true);
+      return;
+    }
+    onClose();
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title={isEditing ? "Editar sessão" : "Registrar sessão"}>
+    <>
+      <Dialog
+        open={open}
+        onClose={handleCloseRequest}
+        title={isEditing ? "Editar sessão" : "Registrar sessão"}
+        description={`${isEditing ? "Edite" : "Registre"} o tempo, progresso e observações da sessão de ${gameTitle}.`}
+      >
       <p className="text-sm text-(--ink-muted)">{gameTitle}</p>
       <div className="mt-6 grid gap-5">
         <DatePicker
@@ -128,7 +145,7 @@ export function SessionSheet({
               {!timerRunning ? (
                 <button
                   type="button"
-                  onClick={() => setTimerRunning(true)}
+                  onClick={timerSeconds > 0 ? onResumeTimer : onStartTimer}
                   className="inline-flex min-h-10 items-center gap-2 rounded-full bg-(--action-bg) px-4 text-sm font-semibold text-(--action-fg)"
                 >
                   <Play aria-hidden="true" size={15} />
@@ -137,7 +154,7 @@ export function SessionSheet({
               ) : (
                 <button
                   type="button"
-                  onClick={() => setTimerRunning(false)}
+                  onClick={onPauseTimer}
                   className="inline-flex min-h-10 items-center gap-2 rounded-full border border-(--line) px-4 text-sm font-semibold hover:bg-(--surface-muted)"
                 >
                   <Pause aria-hidden="true" size={15} />
@@ -194,6 +211,51 @@ export function SessionSheet({
           {isEditing ? "Salvar alterações" : "Salvar sessão"}
         </button>
       </div>
-    </Dialog>
+      </Dialog>
+      <Dialog
+        open={closeConfirmOpen}
+        onClose={() => setCloseConfirmOpen(false)}
+        title="Cronômetro em andamento"
+        description="Escolha o que fazer com o tempo contado antes de fechar o formulário."
+      >
+      <p className="text-sm leading-6 text-(--ink-muted)">
+        O tempo desta sessão continuará contando se você mantiver o cronômetro em segundo plano.
+      </p>
+      <div className="mt-7 grid gap-2">
+        <button
+          type="button"
+          onClick={() => {
+            setCloseConfirmOpen(false);
+            onClose();
+          }}
+          className="min-h-11 rounded-full bg-(--action-bg) px-4 text-sm font-semibold text-(--action-fg)"
+        >
+          Continuar em segundo plano
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            onPauseTimer();
+            setCloseConfirmOpen(false);
+            onClose();
+          }}
+          className="min-h-11 rounded-full border border-(--line) px-4 text-sm font-semibold hover:bg-(--surface-muted)"
+        >
+          Pausar e fechar
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            onDiscardTimer();
+            setCloseConfirmOpen(false);
+            onClose();
+          }}
+          className="min-h-11 rounded-full border border-(--line) px-4 text-sm font-semibold text-(--accent) hover:bg-(--surface-muted)"
+        >
+          Descartar tempo
+        </button>
+      </div>
+      </Dialog>
+    </>
   );
 }

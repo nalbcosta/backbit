@@ -6,8 +6,10 @@ export function sortBoardGames(
 ): readonly BoardGame[] {
   return [...games].sort((first, second) => {
     if (sort === "position") return first.position - second.position;
-    return sort === "title"
-      ? first.title.localeCompare(second.title, "pt-BR")
-      : second.updatedAt.localeCompare(first.updatedAt);
+    if (sort === "title") return first.title.localeCompare(second.title, "pt-BR");
+    if (sort === "progress") {
+      return (second.progressPercent ?? -1) - (first.progressPercent ?? -1);
+    }
+    return second.updatedAt.localeCompare(first.updatedAt);
   });
 }

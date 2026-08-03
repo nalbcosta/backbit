@@ -13,6 +13,8 @@ type BoardGridProps = {
   activeStatus: BoardStatus;
   onOpenGame: (gameId: string) => void;
   onRemoveGame: (gameId: string) => void;
+  onMoveGame: (gameId: string, status: BoardStatus) => void;
+  onRegisterSession: (gameId: string) => void;
   onDropGame: (gameId: string, status: BoardStatus, index?: number) => void;
   onTouchDragStart: (gameId: string) => void;
   onStatusChange: (status: BoardStatus) => void;
@@ -24,6 +26,8 @@ export function BoardGrid({
   activeStatus,
   onOpenGame,
   onRemoveGame,
+  onMoveGame,
+  onRegisterSession,
   onDropGame,
   onTouchDragStart,
   onStatusChange,
@@ -68,6 +72,8 @@ export function BoardGrid({
               games={gamesByStatus[column.key]}
               onOpenGame={onOpenGame}
               onRemoveGame={onRemoveGame}
+              onMoveGame={onMoveGame}
+              onRegisterSession={onRegisterSession}
               onDropGame={onDropGame}
               onTouchDragStart={onTouchDragStart}
             />

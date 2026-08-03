@@ -7,14 +7,19 @@ import { AddGameSheet } from "@/components/board/add-game-sheet";
 import { BoardGrid } from "@/components/board/board-grid";
 import { BoardHeader } from "@/components/board/board-header";
 import { BoardList } from "@/components/board/board-list";
+import { BoardToolbar } from "@/components/board/board-toolbar";
+import { BoardGlobalEmptyState } from "@/components/board/board-global-empty-state";
 import { BoardMobileSwitcher } from "@/components/board/board-mobile-switcher";
 import { GameSheet } from "@/components/board/game-sheet";
 import { SessionSheet } from "@/components/board/session-sheet";
+import { SessionTimerPlayer } from "@/components/board/session-timer-player";
 import { Button } from "@/components/ui/button";
 import { useBoardColumns } from "@/hooks/use-board-columns";
 import { useBoardInteractions } from "@/hooks/use-board-interactions";
 import { useBoardState } from "@/hooks/use-board-state";
+import { useSessionTimer } from "@/hooks/use-session-timer";
 import { getColumnCounts } from "@/lib/board/get-column-counts";
+import { filterBoardGames } from "@/lib/board/filter-board-games";
 import {
   boardColumns,
   mockBoardGames,
@@ -22,6 +27,8 @@ import {
 } from "@/lib/board/mock-board-games";
 import type {
   BoardStatus,
+  BoardFilters,
+  BoardSort,
   CatalogGame,
   PlaySession,
 } from "@/lib/board/board.types";
@@ -38,20 +45,54 @@ export function BoardShell() {
     registerSession,
     updateSession,
     removeSession,
+    undoEntry,
+    undoLastRemoval,
   } = useBoardState(mockBoardGames);
-  const gamesByStatus = useBoardColumns(games, sort);
+  const [filters, setFilters] = useState<BoardFilters>({});
+  const [boardSort, setBoardSort] = useState<BoardSort>(sort);
+  const visibleGames = useMemo(
+    () => filterBoardGames(games, filters),
+    [filters, games],
+  );
+  const gamesByStatus = useBoardColumns(visibleGames, boardSort);
   const counts = useMemo(() => getColumnCounts(gamesByStatus), [gamesByStatus]);
   const { selectedGameId, openGame, closeGame } = useBoardInteractions();
+  const timer = useSessionTimer();
   const [activeStatus, setActiveStatus] = useState<BoardStatus>("playing");
   const [view, setView] = useState<BoardView>("board");
   const [viewsOpen, setViewsOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
+  const [sessionTargetGameId, setSessionTargetGameId] = useState<string | null>(
+    null,
+  );
   const [editingSession, setEditingSession] = useState<PlaySession | null>(
     null,
   );
   const [touchDragGameId, setTouchDragGameId] = useState<string | null>(null);
+  const [toastVisible, setToastVisible] = useState(false);
   const selectedGame = games.find((game) => game.id === selectedGameId) ?? null;
+  const sessionGame =
+    games.find((game) => game.id === sessionTargetGameId) ?? selectedGame;
+  const platforms = useMemo(
+    () => [...new Set(games.map((game) => game.platform))].sort(),
+    [games],
+  );
+  const tags = useMemo(
+    () => [...new Set(games.flatMap((game) => game.tags))].sort(),
+    [games],
+  );
+  const hasFilters = Boolean(
+    filters.query || filters.platform || filters.tags?.length || filters.status,
+  );
+  const visibleGameCount = visibleGames.length;
+
+  useEffect(() => {
+    if (!undoEntry) return;
+    setToastVisible(true);
+    const timeout = window.setTimeout(() => setToastVisible(false), 6000);
+    return () => window.clearTimeout(timeout);
+  }, [undoEntry]);
 
   useEffect(() => {
     if (!touchDragGameId) return;
@@ -80,20 +121,32 @@ export function BoardShell() {
     setActiveStatus(destinationStatus);
   }
   function handleSession(session: PlaySession) {
-    if (!selectedGame) return;
+    if (!sessionGame) return;
     if (editingSession) {
-      updateSession({ gameId: selectedGame.id, session });
+      updateSession({ gameId: sessionGame.id, session });
     } else {
-      registerSession({ gameId: selectedGame.id, session });
+      registerSession({ gameId: sessionGame.id, session });
     }
     setEditingSession(null);
   }
   function openNewSession() {
+    setSessionTargetGameId(timer.gameId ?? selectedGame?.id ?? null);
     setEditingSession(null);
     setSessionOpen(true);
   }
   function openEditSession(session: PlaySession) {
+    setSessionTargetGameId(selectedGame?.id ?? null);
     setEditingSession(session);
+    setSessionOpen(true);
+  }
+  function handleStartTimer() {
+    if (!sessionGame) return;
+    timer.start(sessionGame.id);
+  }
+  function handleFinishTimer() {
+    if (!timer.gameId) return;
+    setSessionTargetGameId(timer.gameId);
+    setEditingSession(null);
     setSessionOpen(true);
   }
 
@@ -154,6 +207,17 @@ export function BoardShell() {
       />
       {view === "board" && (
         <>
+          <div className="mt-6">
+            <BoardToolbar
+              filters={filters}
+              sort={boardSort}
+              platforms={platforms}
+              tags={tags}
+              onFiltersChange={setFilters}
+              onSortChange={setBoardSort}
+              onClear={() => setFilters({})}
+            />
+          </div>
           <div className="mt-7">
             <BoardMobileSwitcher
               columns={boardColumns}
@@ -163,29 +227,74 @@ export function BoardShell() {
             />
           </div>
           <div className="mt-6">
-            <BoardGrid
-              columns={boardColumns}
-              gamesByStatus={gamesByStatus}
-              activeStatus={activeStatus}
-              onOpenGame={openGame}
-              onRemoveGame={removeGame}
-              onDropGame={(gameId, status, index) => {
-                moveGame({
-                  gameId,
-                  destinationStatus: status,
-                  destinationIndex: index,
-                });
-                setActiveStatus(status);
-              }}
-              onTouchDragStart={setTouchDragGameId}
-              onStatusChange={setActiveStatus}
-            />
+            {visibleGameCount > 0 ? (
+              <BoardGrid
+                columns={boardColumns}
+                gamesByStatus={gamesByStatus}
+                activeStatus={activeStatus}
+                onOpenGame={openGame}
+                onRemoveGame={removeGame}
+                onMoveGame={(gameId, status) => moveGame({ gameId, destinationStatus: status })}
+                onRegisterSession={(gameId) => {
+                  openGame(gameId);
+                  setSessionTargetGameId(gameId);
+                  setEditingSession(null);
+                  setSessionOpen(true);
+                }}
+                onDropGame={(gameId, status, index) => {
+                  moveGame({
+                    gameId,
+                    destinationStatus: status,
+                    destinationIndex: index,
+                  });
+                  setActiveStatus(status);
+                }}
+                onTouchDragStart={setTouchDragGameId}
+                onStatusChange={setActiveStatus}
+              />
+            ) : (
+              <BoardGlobalEmptyState
+                filtered={hasFilters}
+                onAdd={() => setAddOpen(true)}
+                onClear={() => setFilters({})}
+              />
+            )}
           </div>
         </>
       )}
       {view === "list" && (
         <div className="mt-8">
-          <BoardList gamesByStatus={gamesByStatus} onOpenGame={openGame} />
+          <BoardToolbar
+            filters={filters}
+            sort={boardSort}
+            platforms={platforms}
+            tags={tags}
+            onFiltersChange={setFilters}
+            onSortChange={setBoardSort}
+            onClear={() => setFilters({})}
+          />
+          <div className="mt-8">
+            {visibleGameCount > 0 ? (
+              <BoardList
+                gamesByStatus={gamesByStatus}
+                onOpenGame={openGame}
+                onRemoveGame={removeGame}
+                onMoveGame={(gameId, status) => moveGame({ gameId, destinationStatus: status })}
+                onRegisterSession={(gameId) => {
+                  openGame(gameId);
+                  setSessionTargetGameId(gameId);
+                  setEditingSession(null);
+                  setSessionOpen(true);
+                }}
+              />
+            ) : (
+              <BoardGlobalEmptyState
+                filtered={hasFilters}
+                onAdd={() => setAddOpen(true)}
+                onClear={() => setFilters({})}
+              />
+            )}
+          </div>
         </div>
       )}
       <button
@@ -214,6 +323,36 @@ export function BoardShell() {
           </div>
         </div>
       )}
+      {timer.gameId && sessionGame && (
+        <SessionTimerPlayer
+          gameTitle={sessionGame.title}
+          seconds={timer.elapsedSeconds}
+          running={timer.isRunning}
+          onPause={timer.pause}
+          onResume={timer.resume}
+          onFinish={handleFinishTimer}
+          onDiscard={timer.reset}
+        />
+      )}
+      {toastVisible && undoEntry && (
+        <div className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-1/2 z-50 flex w-[min(28rem,calc(100vw-2rem))] -translate-x-1/2 items-center gap-4 rounded-2xl border border-(--line) bg-(--surface) px-4 py-3 text-sm shadow-xl md:bottom-6 md:left-auto md:right-6 md:w-auto md:translate-x-0">
+          <span className="text-(--ink-muted)">
+            {undoEntry.kind === "game"
+              ? `${undoEntry.game.title} removido.`
+              : "Sessão removida."}
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              undoLastRemoval();
+              setToastVisible(false);
+            }}
+            className="font-semibold text-(--accent) hover:underline"
+          >
+            Desfazer
+          </button>
+        </div>
+      )}
       <AddGameSheet
         open={addOpen}
         games={games}
@@ -228,18 +367,26 @@ export function BoardShell() {
         onRegisterSession={openNewSession}
         onEditSession={openEditSession}
         onDeleteSession={(sessionId) => {
-          if (selectedGame) removeSession(selectedGame.id, sessionId);
+          if (sessionGame) removeSession(sessionGame.id, sessionId);
         }}
       />
       <SessionSheet
         open={sessionOpen}
-        gameTitle={selectedGame?.title ?? "Jogo"}
+        gameTitle={sessionGame?.title ?? "Jogo"}
         initialSession={editingSession}
         onClose={() => {
           setSessionOpen(false);
           setEditingSession(null);
+          setSessionTargetGameId(null);
         }}
         onSave={handleSession}
+        timerSeconds={timer.elapsedSeconds}
+        timerRunning={timer.isRunning}
+        onStartTimer={handleStartTimer}
+        onPauseTimer={timer.pause}
+        onResumeTimer={timer.resume}
+        onFinishTimer={timer.reset}
+        onDiscardTimer={timer.reset}
       />
     </div>
   );
