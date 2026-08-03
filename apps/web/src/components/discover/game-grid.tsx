@@ -6,14 +6,19 @@ import { useEffect, useState } from "react";
 
 import type { DiscoverGame } from "@/lib/discover/types";
 import { DiscoverGameCard } from "@/components/discover/game-card";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 
 const PAGE_SIZE = 3;
 
 type GameGridProps = {
   games: readonly DiscoverGame[];
   onPreview: (game: DiscoverGame) => void;
+  scope: DiscoverScope;
 };
-export function GameGrid({ games, onPreview }: GameGridProps) {
+export function GameGrid({ games, onPreview, scope }: GameGridProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const pageCount = Math.ceil(games.length / PAGE_SIZE);
   const safePage = Math.min(currentPage, Math.max(pageCount, 1));
@@ -40,7 +45,7 @@ export function GameGrid({ games, onPreview }: GameGridProps) {
             {games.length} encontrados
           </p>
           <Link
-            href="/discover/games"
+            href={getDiscoverRoutes(scope).games}
             className="inline-flex min-h-10 items-center gap-2 rounded-full border border-(--line) px-4 text-xs font-semibold text-(--ink-muted) transition-colors hover:border-(--ink-muted) hover:text-(--ink) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
           >
             Catálogo completo
@@ -56,6 +61,7 @@ export function GameGrid({ games, onPreview }: GameGridProps) {
                 key={game.id}
                 game={game}
                 onPreview={onPreview}
+                scope={scope}
               />
             ))}
           </div>

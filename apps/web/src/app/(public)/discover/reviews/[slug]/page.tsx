@@ -10,5 +10,5 @@ export default async function ReviewPage({ params }: ReviewPageProps) {
     ? discoverGames.find((item) => item.id === review.gameId)
     : undefined;
   if (!review || !game) notFound();
-  return <ReviewDetailPage review={review} game={game} />;
+  return <ReviewDetailPage review={review} game={game} scope="public" />;
 }

@@ -4,7 +4,7 @@ import { Suspense } from "react";
 export default function GamesDiscoverPage() {
   return (
     <Suspense>
-      <GamesDiscoverShell />
+      <GamesDiscoverShell scope="public" />
     </Suspense>
   );
 }

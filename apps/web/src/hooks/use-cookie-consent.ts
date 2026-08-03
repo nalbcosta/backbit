@@ -26,7 +26,10 @@ function readConsent(): CookieConsent | null {
       return {
         necessary: true,
         analytics: record.analytics === true,
-        updatedAt: typeof record.updatedAt === "string" ? record.updatedAt : new Date().toISOString(),
+        updatedAt:
+          typeof record.updatedAt === "string"
+            ? record.updatedAt
+            : new Date().toISOString(),
       };
     }
   } catch {
@@ -38,9 +41,11 @@ function readConsent(): CookieConsent | null {
 
 export function useCookieConsent() {
   const [consent, setConsent] = useState<CookieConsent | null>(null);
+  const [hasHydrated, setHasHydrated] = useState(false);
 
   useEffect(() => {
     setConsent(readConsent());
+    setHasHydrated(true);
   }, []);
 
   const saveConsent = useCallback((analytics: boolean) => {
@@ -56,6 +61,7 @@ export function useCookieConsent() {
 
   return {
     consent,
+    hasHydrated,
     hasChoice: consent !== null,
     saveConsent,
   };

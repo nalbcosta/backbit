@@ -4,14 +4,32 @@ import { Container } from "@/components/ui/container";
 import { GameCardCarousel } from "@/components/ui/game-card-carousel";
 
 const heroGames = [
-  { status: "Em jogo", meta: "12h 34m", title: "Noite sem mapa.", description: "Uma sessão curta também conta. Continue de onde parou." },
-  { status: "Em jogo", meta: "Sessão 04", title: "A cidade que chove.", description: "Registre o que ficou na cabeça antes de fechar o jogo." },
-  { status: "Na fila", meta: "6–8 horas", title: "Depois do inverno.", description: "Um jogo para terminar em um fim de semana sem pressa." },
+  {
+    status: "Em jogo",
+    meta: "12h 34m",
+    title: "Noite sem mapa.",
+    description: "Uma sessão curta também conta. Continue de onde parou.",
+  },
+  {
+    status: "Em jogo",
+    meta: "Sessão 04",
+    title: "A cidade que chove.",
+    description: "Registre o que ficou na cabeça antes de fechar o jogo.",
+  },
+  {
+    status: "Na fila",
+    meta: "6–8 horas",
+    title: "Depois do inverno.",
+    description: "Um jogo para terminar em um fim de semana sem pressa.",
+  },
 ] as const;
 export function Hero() {
   return (
     <section id="inicio" className="landing-section relative overflow-hidden">
-      <div className="hero-contours pointer-events-none absolute inset-0" aria-hidden="true">
+      <div
+        className="hero-contours pointer-events-none absolute inset-0"
+        aria-hidden="true"
+      >
         <svg
           className="h-full w-full"
           viewBox="0 0 1440 900"
@@ -25,16 +43,56 @@ export function Hero() {
             />
           </defs>
           <g className="hero-contours-motion">
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(1.84) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(1.68) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(1.52) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(1.36) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(1.2) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(1.04) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(.88) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(.72) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(.56) translate(-720 -450)" />
-            <use href="#hero-contour" className="hero-contour-line" transform="translate(720 450) scale(.4) translate(-720 -450)" />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(1.84) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(1.68) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(1.52) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(1.36) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(1.2) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(1.04) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(.88) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(.72) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(.56) translate(-720 -450)"
+            />
+            <use
+              href="#hero-contour"
+              className="hero-contour-line"
+              transform="translate(720 450) scale(.4) translate(-720 -450)"
+            />
           </g>
         </svg>
       </div>

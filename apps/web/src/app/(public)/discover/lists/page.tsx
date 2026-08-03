@@ -3,7 +3,7 @@ import { Suspense } from "react";
 export default function ListsDiscoverPage() {
   return (
     <Suspense>
-      <ListsDiscoverShell />
+      <ListsDiscoverShell scope="public" />
     </Suspense>
   );
 }

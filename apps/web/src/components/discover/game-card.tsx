@@ -3,12 +3,17 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { DiscoverGame } from "@/lib/discover/types";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 
 type GameCardProps = {
   game: DiscoverGame;
   onPreview: (game: DiscoverGame) => void;
+  scope: DiscoverScope;
 };
-export function DiscoverGameCard({ game, onPreview }: GameCardProps) {
+export function DiscoverGameCard({ game, onPreview, scope }: GameCardProps) {
   return (
     <Card className="group overflow-hidden rounded-2xl">
       <div
@@ -39,7 +44,7 @@ export function DiscoverGameCard({ game, onPreview }: GameCardProps) {
             <Eye aria-hidden="true" size={16} /> Prévia
           </button>
           <Link
-            href={`/discover/games/${game.slug}`}
+            href={getDiscoverRoutes(scope).game(game.slug)}
             aria-label={`Abrir ${game.title}`}
             className="inline-flex size-10 items-center justify-center rounded-full border border-(--line) transition-colors hover:bg-(--action-bg) hover:text-(--action-fg) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
           >

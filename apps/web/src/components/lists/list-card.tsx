@@ -3,9 +3,13 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import type { DiscoverCollection } from "@/lib/discover/types";
+import {
+  getDiscoverRoutes,
+  type DiscoverScope,
+} from "@/lib/discover/discover-routes";
 
-type Props = { collection: DiscoverCollection };
-export function ListCard({ collection }: Props) {
+type Props = { collection: DiscoverCollection; scope: DiscoverScope };
+export function ListCard({ collection, scope }: Props) {
   const tone = collection.coverTone ?? "night";
   return (
     <Card className="group flex min-h-80 flex-col overflow-hidden rounded-2xl p-0">
@@ -41,7 +45,7 @@ export function ListCard({ collection }: Props) {
           ) : null}
         </div>
         <Link
-          href={`/discover/lists/${collection.slug}?from=/discover/lists`}
+          href={`${getDiscoverRoutes(scope).list(collection.slug)}?from=${getDiscoverRoutes(scope).lists}`}
           className="mt-4 inline-flex items-center gap-2 self-start text-sm font-semibold transition-colors hover:text-(--accent)"
         >
           Abrir lista <ArrowUpRight aria-hidden="true" size={16} />
