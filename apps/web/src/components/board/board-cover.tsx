@@ -23,6 +23,8 @@ export function BoardCover({
       style={{ background: coverTones[game.coverTone] }}
     >
       {game.coverUrl && (
+        // Covers may come from external game catalogs, so they cannot use a fixed Next Image allowlist yet.
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={game.coverUrl}
           alt=""

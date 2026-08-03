@@ -1,6 +1,4 @@
-type StepWelcomeProps = Record<string, never>;
-
-export function StepWelcome(_: StepWelcomeProps) {
+export function StepWelcome() {
   return (
     <section aria-labelledby="onboarding-welcome-title">
       <p className="eyebrow">Bem-vindo ao Backbit</p>
