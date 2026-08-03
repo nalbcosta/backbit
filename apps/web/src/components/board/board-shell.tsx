@@ -29,8 +29,16 @@ import type {
 type BoardView = "board" | "list";
 
 export function BoardShell() {
-  const { games, sort, moveGame, addGame, registerSession } =
-    useBoardState(mockBoardGames);
+  const {
+    games,
+    sort,
+    moveGame,
+    removeGame,
+    addGame,
+    registerSession,
+    updateSession,
+    removeSession,
+  } = useBoardState(mockBoardGames);
   const gamesByStatus = useBoardColumns(games, sort);
   const counts = useMemo(() => getColumnCounts(gamesByStatus), [gamesByStatus]);
   const { selectedGameId, openGame, closeGame } = useBoardInteractions();
@@ -39,6 +47,9 @@ export function BoardShell() {
   const [viewsOpen, setViewsOpen] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
   const [sessionOpen, setSessionOpen] = useState(false);
+  const [editingSession, setEditingSession] = useState<PlaySession | null>(
+    null,
+  );
   const [touchDragGameId, setTouchDragGameId] = useState<string | null>(null);
   const selectedGame = games.find((game) => game.id === selectedGameId) ?? null;
 
@@ -69,7 +80,21 @@ export function BoardShell() {
     setActiveStatus(destinationStatus);
   }
   function handleSession(session: PlaySession) {
-    if (selectedGame) registerSession({ gameId: selectedGame.id, session });
+    if (!selectedGame) return;
+    if (editingSession) {
+      updateSession({ gameId: selectedGame.id, session });
+    } else {
+      registerSession({ gameId: selectedGame.id, session });
+    }
+    setEditingSession(null);
+  }
+  function openNewSession() {
+    setEditingSession(null);
+    setSessionOpen(true);
+  }
+  function openEditSession(session: PlaySession) {
+    setEditingSession(session);
+    setSessionOpen(true);
   }
 
   return (
@@ -143,6 +168,7 @@ export function BoardShell() {
               gamesByStatus={gamesByStatus}
               activeStatus={activeStatus}
               onOpenGame={openGame}
+              onRemoveGame={removeGame}
               onDropGame={(gameId, status, index) => {
                 moveGame({
                   gameId,
@@ -199,12 +225,20 @@ export function BoardShell() {
         game={selectedGame}
         onClose={closeGame}
         onMove={handleMove}
-        onRegisterSession={() => setSessionOpen(true)}
+        onRegisterSession={openNewSession}
+        onEditSession={openEditSession}
+        onDeleteSession={(sessionId) => {
+          if (selectedGame) removeSession(selectedGame.id, sessionId);
+        }}
       />
       <SessionSheet
         open={sessionOpen}
         gameTitle={selectedGame?.title ?? "Jogo"}
-        onClose={() => setSessionOpen(false)}
+        initialSession={editingSession}
+        onClose={() => {
+          setSessionOpen(false);
+          setEditingSession(null);
+        }}
         onSave={handleSession}
       />
     </div>

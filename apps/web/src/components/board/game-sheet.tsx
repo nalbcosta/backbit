@@ -1,15 +1,18 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Dialog } from "@/components/ui/dialog";
 import { getGameProgressLabel } from "@/lib/board/board-game-progress";
-import { Plus } from "lucide-react";
+import { Pencil, Plus, Trash2 } from "lucide-react";
 import { boardColumns, boardStatusLabels } from "@/lib/board/mock-board-games";
-import type { BoardGame, BoardStatus } from "@/lib/board/board.types";
+import type { BoardGame, BoardStatus, PlaySession } from "@/lib/board/board.types";
 
 type GameSheetProps = {
   game: BoardGame | null;
   onClose: () => void;
   onMove: (status: BoardStatus) => void;
   onRegisterSession: () => void;
+  onEditSession: (session: PlaySession) => void;
+  onDeleteSession: (sessionId: string) => void;
 };
 
 export function GameSheet({
@@ -17,14 +20,26 @@ export function GameSheet({
   onClose,
   onMove,
   onRegisterSession,
+  onEditSession,
+  onDeleteSession,
 }: GameSheetProps) {
+  const [sessionToDelete, setSessionToDelete] = useState<PlaySession | null>(
+    null,
+  );
+  const formatSessionDate = (playedOn: string) =>
+    new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    }).format(new Date(`${playedOn}T12:00:00`));
   return (
-    <Dialog
-      open={game !== null}
-      onClose={onClose}
-      title={game?.title ?? "Jogo"}
-    >
-      {game && (
+    <>
+      <Dialog
+        open={game !== null}
+        onClose={onClose}
+        title={game?.title ?? "Jogo"}
+      >
+        {game && (
         <div>
           <div className="flex flex-wrap gap-2">
             <Badge>{game.platform}</Badge>
@@ -75,28 +90,53 @@ export function GameSheet({
               </button>
             </div>
             {game.sessions.length > 0 && (
-              <ul className="mt-4 divide-y divide-(--line)">
+              <ul className="mt-5 grid gap-3">
                 {[...game.sessions]
                   .sort((first, second) =>
                     second.playedOn.localeCompare(first.playedOn),
                   )
                   .map((session) => (
-                    <li
-                      key={session.id}
-                      className="py-3 text-sm leading-6 text-(--ink-muted)"
-                    >
-                      <span className="font-semibold text-(--ink)">
-                        {new Intl.DateTimeFormat("pt-BR").format(
-                          new Date(`${session.playedOn}T12:00:00`),
-                        )}
-                      </span>{" "}
-                      · {session.durationMinutes} min
-                      {session.progressPercent !== undefined
-                        ? ` · ${session.progressPercent}%`
-                        : ""}
-                      {session.note ? (
-                        <span className="block">{session.note}</span>
-                      ) : null}
+                    <li key={session.id} className="rounded-2xl border border-(--line) bg-(--surface-muted)/35 p-4">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <p className="text-sm font-semibold text-(--ink)">
+                            {formatSessionDate(session.playedOn)}
+                          </p>
+                          <div className="mt-2 flex flex-wrap gap-2 text-xs text-(--ink-muted)">
+                            <span className="rounded-full bg-(--surface-muted) px-2.5 py-1">
+                              {session.durationMinutes} min
+                            </span>
+                            {session.progressPercent !== undefined && (
+                              <span className="rounded-full bg-(--surface-muted) px-2.5 py-1">
+                                {session.progressPercent}% de progresso
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex shrink-0 gap-1">
+                          <button
+                            type="button"
+                            aria-label={`Editar sessão de ${formatSessionDate(session.playedOn)}`}
+                            onClick={() => onEditSession(session)}
+                            className="inline-flex size-9 items-center justify-center rounded-full text-(--ink-muted) hover:bg-(--surface-muted) hover:text-(--ink)"
+                          >
+                            <Pencil aria-hidden="true" size={15} />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Excluir sessão de ${formatSessionDate(session.playedOn)}`}
+                            onClick={() => setSessionToDelete(session)}
+                            className="inline-flex size-9 items-center justify-center rounded-full text-(--ink-muted) hover:bg-(--surface-muted) hover:text-(--accent)"
+                          >
+                            <Trash2 aria-hidden="true" size={15} />
+                          </button>
+                        </div>
+                      </div>
+                      {session.note && (
+                        <p className="mt-3 border-t border-(--line) pt-3 text-sm leading-6 text-(--ink-muted)">
+                          {session.note}
+                        </p>
+                      )}
                     </li>
                   ))}
               </ul>
@@ -121,7 +161,40 @@ export function GameSheet({
             ))}
           </select>
         </div>
-      )}
-    </Dialog>
+        )}
+      </Dialog>
+      <Dialog
+        open={sessionToDelete !== null}
+        onClose={() => setSessionToDelete(null)}
+        title="Excluir sessão?"
+      >
+        {sessionToDelete && (
+          <>
+          <p className="text-sm leading-6 text-(--ink-muted)">
+            Essa sessão de {formatSessionDate(sessionToDelete.playedOn)} será removida do histórico.
+          </p>
+          <div className="mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+            <button
+              type="button"
+              onClick={() => setSessionToDelete(null)}
+              className="min-h-11 rounded-full border border-(--line) px-4 text-sm font-semibold hover:bg-(--surface-muted)"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                onDeleteSession(sessionToDelete.id);
+                setSessionToDelete(null);
+              }}
+              className="min-h-11 rounded-full bg-(--accent) px-4 text-sm font-semibold text-(--accent-ink)"
+            >
+              Excluir sessão
+            </button>
+          </div>
+          </>
+        )}
+      </Dialog>
+    </>
   );
 }

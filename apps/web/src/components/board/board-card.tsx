@@ -1,8 +1,9 @@
-import { ArrowUpRight, GripVertical } from "lucide-react";
-import { useRef } from "react";
+import { ArrowUpRight, GripVertical, Trash2 } from "lucide-react";
+import { useRef, useState } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
+import { Dialog } from "@/components/ui/dialog";
 import type { BoardGame } from "@/lib/board/board.types";
 import { BoardCardMeta } from "@/components/board/board-card-meta";
 
@@ -18,6 +19,7 @@ const coverTones: Record<BoardGame["coverTone"], string> = {
 type BoardCardProps = {
   game: BoardGame;
   onOpen: (gameId: string) => void;
+  onRemove: (gameId: string) => void;
   onDragStart?: (gameId: string) => void;
   onTouchDragStart?: (gameId: string) => void;
 };
@@ -25,9 +27,11 @@ type BoardCardProps = {
 export function BoardCard({
   game,
   onOpen,
+  onRemove,
   onDragStart,
   onTouchDragStart,
 }: BoardCardProps) {
+  const [removeOpen, setRemoveOpen] = useState(false);
   const longPressTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
   function clearLongPress() {
     if (longPressTimeout.current) window.clearTimeout(longPressTimeout.current);
@@ -62,7 +66,7 @@ export function BoardCard({
       <button
         type="button"
         onClick={() => onOpen(game.id)}
-        className="block min-h-36 w-full p-3 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-(--accent)"
+        className="block min-h-36 w-full p-3 pb-11 text-left focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-(--accent)"
       >
         <div className="flex gap-3">
           <div
@@ -93,6 +97,43 @@ export function BoardCard({
           </p>
         )}
       </button>
+      <button
+        type="button"
+        aria-label={`Remover ${game.title}`}
+        title="Remover do Kanban"
+        onClick={() => setRemoveOpen(true)}
+        className="absolute bottom-2 right-2 inline-flex size-8 items-center justify-center rounded-full text-(--ink-muted) transition-colors hover:bg-(--surface-muted) hover:text-(--accent) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+      >
+        <Trash2 aria-hidden="true" size={15} />
+      </button>
+      <Dialog
+        open={removeOpen}
+        onClose={() => setRemoveOpen(false)}
+        title="Remover jogo?"
+      >
+        <p className="text-sm leading-6 text-(--ink-muted)">
+          Tem certeza que deseja remover <strong className="text-(--ink)">{game.title}</strong> do seu Kanban?
+        </p>
+        <div className="mt-7 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <button
+            type="button"
+            onClick={() => setRemoveOpen(false)}
+            className="min-h-11 rounded-full border border-(--line) px-4 text-sm font-semibold hover:bg-(--surface-muted) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              onRemove(game.id);
+              setRemoveOpen(false);
+            }}
+            className="min-h-11 rounded-full bg-(--accent) px-4 text-sm font-semibold text-(--accent-ink) hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+          >
+            Remover
+          </button>
+        </div>
+      </Dialog>
     </Card>
   );
 }

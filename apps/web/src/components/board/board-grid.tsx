@@ -12,6 +12,7 @@ type BoardGridProps = {
   gamesByStatus: BoardColumnsByStatus;
   activeStatus: BoardStatus;
   onOpenGame: (gameId: string) => void;
+  onRemoveGame: (gameId: string) => void;
   onDropGame: (gameId: string, status: BoardStatus, index?: number) => void;
   onTouchDragStart: (gameId: string) => void;
   onStatusChange: (status: BoardStatus) => void;
@@ -22,6 +23,7 @@ export function BoardGrid({
   gamesByStatus,
   activeStatus,
   onOpenGame,
+  onRemoveGame,
   onDropGame,
   onTouchDragStart,
   onStatusChange,
@@ -52,7 +54,7 @@ export function BoardGrid({
       className="-mx-5 overflow-hidden px-5 pb-24 touch-pan-y md:mx-0 md:h-[calc(100dvh-20rem)] md:min-h-120 md:overflow-x-auto md:pb-3"
     >
       <div
-        className="flex w-full translate-x-(--board-carousel-offset) transition-transform duration-300 ease-out md:grid md:h-full md:min-w-[108rem] md:translate-x-0 md:grid-cols-6"
+        className="flex w-full translate-x-(--board-carousel-offset) transition-transform duration-300 ease-out md:grid md:h-full md:min-w-[108rem] md:translate-x-0 md:grid-cols-6 md:gap-4"
         style={
           {
             "--board-carousel-offset": `-${Math.max(activeIndex, 0) * 100}%`,
@@ -65,6 +67,7 @@ export function BoardGrid({
               column={column}
               games={gamesByStatus[column.key]}
               onOpenGame={onOpenGame}
+              onRemoveGame={onRemoveGame}
               onDropGame={onDropGame}
               onTouchDragStart={onTouchDragStart}
             />

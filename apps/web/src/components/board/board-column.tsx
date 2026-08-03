@@ -10,6 +10,7 @@ type BoardColumnProps = {
   column: BoardColumnType;
   games: readonly BoardGame[];
   onOpenGame: (gameId: string) => void;
+  onRemoveGame: (gameId: string) => void;
   onDropGame: (
     gameId: string,
     status: BoardColumnType["key"],
@@ -22,6 +23,7 @@ export function BoardColumn({
   column,
   games,
   onOpenGame,
+  onRemoveGame,
   onDropGame,
   onTouchDragStart,
 }: BoardColumnProps) {
@@ -56,6 +58,7 @@ export function BoardColumn({
               <BoardCard
                 game={game}
                 onOpen={onOpenGame}
+                onRemove={onRemoveGame}
                 onDragStart={() => undefined}
                 onTouchDragStart={onTouchDragStart}
               />
